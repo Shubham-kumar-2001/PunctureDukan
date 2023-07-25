@@ -1,0 +1,20 @@
+const express = require("express");
+const router = express.Router();
+const {
+  CarouselPage,
+  ServicePages,
+  Review,
+  WhenEverAndWhereEver,
+  WhatInIt,
+  service,
+} = require("../controller/HomeController");
+const Authmiddleware = require("../Middleware/Authmiddleware");
+
+router.route("/carousel").get(CarouselPage);
+router.route("/services").get(ServicePages);
+router.route("/review").get(Review);
+router.route("/whenever&whereever").get(WhenEverAndWhereEver);
+router.route("/whatinit").get(WhatInIt);
+router.route("/service/:service_id").get(Authmiddleware, service);
+
+module.exports = router;

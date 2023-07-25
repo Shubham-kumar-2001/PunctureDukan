@@ -1,0 +1,7 @@
+.invalid input {
+  border: 2px solid #ff3300df;
+}
+
+.invalid textarea {
+  border: 2px solid #ff3300df;
+}
