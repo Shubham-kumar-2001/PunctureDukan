@@ -1,5 +1,4 @@
 import React from "react";
-import ButtonForm from "../../../UI/buttonForm";
 const OnAcceptOrder = (props) => {
   return (
     <div className="container mx-auto">
@@ -12,6 +11,9 @@ const OnAcceptOrder = (props) => {
           <span className="text-[19px] font-normal">
             Distance:-{props.distance}
           </span>
+        </div>
+        <div className="flex justify-center flex-col mt-2">
+          <span className="text-[22px] font-bols">OTP :-{props.otp}</span>
         </div>
         <div className="bg-white flex hover:bg-green-100 w-[100%]">
           <div className="w-[80px] h-[82px] min-w-[82px] ml-[10px] flex flex-col items-center justify-center">

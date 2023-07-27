@@ -18,6 +18,7 @@ import ContactUs from "../Components/ContactUs/ContactUs";
 import AddService from "../Components/AddService/AddService";
 import Order from "../Components/Order/Order";
 import OrderModelPOPUP from "../Components/Order/OrderModelPOPUP.jsx";
+import PaymentsRequest from "../Components/Payments/PaymentsRequest";
 const RoutesProvider = () => {
   const [user, setUser] = useState({});
   const updateUser = (data) => {
@@ -26,6 +27,8 @@ const RoutesProvider = () => {
   const resetUser = () => {
     setUser({});
   };
+  const [payment, setPayment] = useState();
+  const [verify, setVerify] = useState(false);
   const routesForPublic = [
     {
       element: <RouterLayout />,
@@ -61,7 +64,12 @@ const RoutesProvider = () => {
           children: [
             {
               path: "/serviceprovider/puncturedukan/locate",
-              element: <OrderModelPOPUP />,
+              element: (
+                <OrderModelPOPUP
+                  setVerify={setVerify}
+                  setPayment={setPayment}
+                />
+              ),
             },
             {
               path: "/serviceprovider/puncturedukan/profile",
@@ -78,6 +86,14 @@ const RoutesProvider = () => {
             {
               path: "/serviceprovider/puncturedukan/addservice",
               element: <AddService />,
+            },
+            {
+              path: "/serviceprovider/puncturedukan/payment",
+              element: verify ? (
+                <PaymentsRequest payment={payment} />
+              ) : (
+                <Navigate replace to="/serviceprovider/puncturedukan/locate" />
+              ),
             },
           ],
         },

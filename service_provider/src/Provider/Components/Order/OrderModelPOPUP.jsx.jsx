@@ -9,16 +9,20 @@ import OnAcceptOrder from "./OnAccept";
 import MapBoxLocation from "../Map/MapBox";
 import DirectionMapBox from "../Map/DirectionMapBox";
 import LoadingSpinner from "../../../UIElements/LoadingSpinner";
-const OrderModelPOPUP = () => {
-  const [order_id, setOrder_id] = useState();
+import OnArrive from "./OnArrive";
+const OrderModelPOPUP = (props) => {
+  const [order_id, setOrder_id] = useState({
+    provider_id: "",
+    serviceOrder_id: "",
+  });
   const [accept, setAccept] = useState(false);
   const [open, setOpen] = useState(false);
   const authCtx = useContext(AuthContex);
-  const [address, setAddress] = useState(" ");
+  const [address, setAddress] = useState("");
   const [useraddress, setUseraddress] = useState("");
   const [userData, setuserData] = useState({ firstname: "", lastname: "" });
-  const [orderDetail, setOrderDetail] = useState();
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const [verifyOTP, setVerifyOTP] = useState(false);
+  const { isLoading, sendRequest } = useHttpClient();
   const [orderData, setOrderData] = useState({ image: "", servicename: "" });
   const handleError = (err) =>
     toast.error(err, {
@@ -32,7 +36,7 @@ const OrderModelPOPUP = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
-          `${process.env.REACT_APP_ORDER}providerorderdetail`
+          "http://localhost:2020/api/puncturedukan/serviceorder/providerorderdetail"
         );
         const { success, provider } = responseData;
         console.log(responseData.provider._id, "data");
@@ -40,14 +44,14 @@ const OrderModelPOPUP = () => {
           setOpen(true);
           setOrderData(provider.Geonear[0]);
           setuserData(provider.userdata[0]);
-          setOrder_id(responseData.provider._id);
+          setOrder_id({ provider_id: responseData.provider._id });
           const data = await axios.get(
-            `${process.env.REACT_APP_ADDRESS}${provider.Geonear[0].providerlocation.coordinates[0]},${provider.Geonear[0].providerlocation.coordinates[1]}.json?access_token=${process.env.REACT_APP_MAPBOX}`
+            `https://api.mapbox.com/geocoding/v5/mapbox.places/${provider.Geonear[0].providerlocation.coordinates[0]},${provider.Geonear[0].providerlocation.coordinates[1]}.json?access_token=pk.eyJ1IjoiYW5zaHU5NjAiLCJhIjoiY2xpc2h1bWZ0MTQyaDNsbnFrdnB2ZHk2aCJ9.ZWMlj-AyBEl8KfbzBVFLWw`
           );
-          console.log(provider.userdata[0], "lati");
+
           setAddress(data.data.features[0].place_name);
           const useraddr = await axios.get(
-            `${process.env.REACT_APP_ADDRESS}${provider.userdata[0].latitude},${provider.userdata[0].longitude}.json?access_token=${process.env.REACT_APP_MAPBOX}`
+            `https://api.mapbox.com/geocoding/v5/mapbox.places/${provider.userdata[0].latitude},${provider.userdata[0].longitude}.json?access_token=pk.eyJ1IjoiYW5zaHU5NjAiLCJhIjoiY2xpc2h1bWZ0MTQyaDNsbnFrdnB2ZHk2aCJ9.ZWMlj-AyBEl8KfbzBVFLWw`
           );
           setUseraddress(useraddr.data.features[0].place_name);
         }
@@ -58,13 +62,14 @@ const OrderModelPOPUP = () => {
         fetchUsers();
       }
     }, 17000);
+
     return () => clearInterval(intervals);
   }, []);
 
   const acceptOrder = async () => {
     try {
       const responseData = await sendRequest(
-        `${process.env.REACT_APP_ORDER}acceptorder`,
+        "http://localhost:2020/api/puncturedukan/serviceorder/acceptorder",
         "POST",
         JSON.stringify({
           userlatitude: userData.latitude,
@@ -80,17 +85,18 @@ const OrderModelPOPUP = () => {
           image: orderData.image,
           price: orderData.price,
           shopname: orderData.companyname,
-          order_id,
+          order_id: order_id.provider_id,
         }),
         {
           "Content-Type": "application/json",
         }
       );
-      const { success, message } = responseData;
+      const { success, message, serviceOrder_id } = responseData;
       if (success) {
         setOpen(false);
         setAccept(true);
         handleSuccess(message);
+        setOrder_id({ serviceOrder_id: serviceOrder_id });
       }
     } catch (err) {
       handleError(err.message);
@@ -99,9 +105,12 @@ const OrderModelPOPUP = () => {
   const rejectOrder = async () => {
     try {
       const responseData = await sendRequest(
-        `${process.env.REACT_APP_ORDER}onrejectorder`,
+        "http://localhost:2020/api/puncturedukan/serviceorder/onrejectorder",
         "PUT",
-        JSON.stringify({ order_id, username: orderData.username }),
+        JSON.stringify({
+          order_id: order_id.provider_id,
+          username: orderData.username,
+        }),
         {
           "Content-Type": "application/json",
         }
@@ -114,14 +123,28 @@ const OrderModelPOPUP = () => {
       }
     } catch (err) {}
   };
-  console.log(orderData, "order");
-  console.log(userData, "usr");
-  console.log(address, "address");
-  console.log(accept);
+  const onArriveToUSer = () => {
+    const data = {
+      image: orderData.image,
+      price: orderData.price,
+      servicename: orderData.servicename,
+      name: userData.firstname + " " + userData.lastname,
+      address: useraddress,
+      mobilenumber: userData.mobilenumber,
+      username: userData.username,
+    };
+    props.setPayment(data);
+    setVerifyOTP(true);
+    props.setVerify(true);
+  };
+  // console.log(orderData, "order");
+  // console.log(userData, "usr");
+  // console.log(address, "address");
+  // console.log(accept);
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
-      {!accept && (
+      {!accept && !verifyOTP && (
         <div className="w-[99%] h-[calc(100vh-4.5rem)] sm:w-[80%] sm:h-[calc(100vh-6rem)]  mx-auto my-auto rounded overflow-hidden">
           <MapBoxLocation />
           <Modal
@@ -139,7 +162,7 @@ const OrderModelPOPUP = () => {
           </Modal>
         </div>
       )}
-      {accept && (
+      {accept && !verifyOTP && (
         <>
           <div className="w-[99%] h-[60vh] sm:w-[80%] sm:h-[calc(100vh-6rem)]  mx-auto my-auto rounded overflow-hidden">
             <DirectionMapBox
@@ -158,9 +181,11 @@ const OrderModelPOPUP = () => {
             latitude={userData.latitude}
             distance={orderData.calcDistance}
             isLoading={isLoading}
+            onArriveToUSer={onArriveToUSer}
           />
         </>
       )}
+      {verifyOTP && <OnArrive serviceOrder_id={order_id.serviceOrder_id} />}
     </>
   );
 };

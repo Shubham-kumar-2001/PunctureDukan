@@ -11,6 +11,7 @@ const GeoNear = require("../Module/Order/GeoNearData");
 module.exports.fetchingNearServiceProviderLocation = async (req, res) => {
   try {
     const { longitude, latitude, servicename } = req.body;
+    console.log(req.body);
     const { username } = req.user;
     console.log(req.body);
     const user = await User.findOne({ username });
@@ -31,7 +32,11 @@ module.exports.fetchingNearServiceProviderLocation = async (req, res) => {
         },
       },
     ]);
-
+    if (providerData.length == 0) {
+      return res
+        .status(301)
+        .json({ success: false, message: "No Provider Found" });
+    }
     const userData = [
       {
         mobilenumber,
@@ -57,6 +62,7 @@ module.exports.fetchingNearServiceProviderLocation = async (req, res) => {
 module.exports.fetchRequestForService = async (req, res) => {
   try {
     const provider = await GeoNear.findOne({});
+    // console.log(provider)
     res.status(201).json({ success: true, provider });
   } catch (err) {
     console.log(err.message);
@@ -68,11 +74,16 @@ module.exports.onReject = async (req, res) => {
   try {
     const { order_id, username } = req.body;
     console.log(req.body);
-    await GeoNear.findByIdAndUpdate(
+    const provider = await GeoNear.findByIdAndUpdate(
       { _id: order_id },
       { $pull: { Geonear: { username } } },
       { new: true }
     );
+    if (provider.length == 0) {
+      return res
+        .status(301)
+        .json({ success: false, message: "No Provider Found" });
+    }
     res
       .status(201)
       .json({ success: true, message: "Successfully skip the service" });
@@ -124,7 +135,7 @@ module.exports.acceptOrder = async (req, res) => {
     });
     console.log(otp);
     const hashOtp = await bcrypt.hash(otp, 12);
-    await OrderService.create({
+    const data = await OrderService.create({
       usermobilenumber,
       userfirstname,
       userlastname,
@@ -142,12 +153,14 @@ module.exports.acceptOrder = async (req, res) => {
       providerusername: username,
       status: "pending",
     });
+    const serviceOrder_id = data._id;
     const providerlocation = {
       type: "Point",
       coordinates: [providerlatitude, providerlongitude],
     };
     await UserOrder.create({
       username: userusername,
+      otp,
       servicename,
       image,
       providerlocation,
@@ -159,9 +172,11 @@ module.exports.acceptOrder = async (req, res) => {
       status: "Pending",
     });
     await GeoNear.findByIdAndDelete({ _id: order_id });
-    res
-      .status(201)
-      .json({ success: true, message: "Successfully you got Customer" });
+    res.status(201).json({
+      success: true,
+      message: "Successfully you got Customer",
+      serviceOrder_id,
+    });
   } catch (err) {
     console.log(err.message);
     res.status(201).json({ success: false, message: "Something went wrong" });
@@ -171,10 +186,12 @@ module.exports.acceptOrder = async (req, res) => {
 module.exports.fetchUserOrderDetail = async (req, res) => {
   try {
     const { username } = req.user;
+    // console.log;
     const userOrderdata = await UserOrder.findOne({ username });
     if (!userOrderdata) {
       return res.status(501).json({ success: false, message: "Invalid User" });
     }
+    console.log(userOrderdata);
     await UserOrder.findOneAndDelete({ username });
     res.status(201).json({
       success: true,
@@ -182,6 +199,7 @@ module.exports.fetchUserOrderDetail = async (req, res) => {
       userOrderdata,
     });
   } catch (err) {
+    // console.log(err.message);
     res.status(501).json({ success: false, message: err.message });
   }
 };
@@ -229,18 +247,21 @@ module.exports.fetchUserOrderDetail = async (req, res) => {
 
 module.exports.onArrive = async (req, res) => {
   try {
-    const { code, order_id } = req.body;
+    const { otp, order_id } = req.body;
+    console.log(req.body);
     const orderData = await OrderService.findById({ _id: order_id });
     if (!orderData) {
       return res.status(501).json({ success: false, message: "Invalid Order" });
     }
-    const validate = await bcrypt.compare(code.orderData.otp);
+    console.log(orderData);
+    console.log(await bcrypt.hash(otp, 12));
+    const validate = await bcrypt.compare(otp, orderData.otp);
     if (!validate) {
       return res.status(301).json({ success: false, message: "Incorrect Otp" });
     }
     res.status(201).json({ success: true, message: "Successfully Arrive" });
   } catch (err) {
     console.log(err.message);
-    res.status(501).json({ success: false, message: "Something went wrong" });
+    res.status(501).json({ success: false, message: err.message });
   }
 };

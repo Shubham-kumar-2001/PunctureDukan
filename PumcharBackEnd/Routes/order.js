@@ -6,12 +6,14 @@ const {
   acceptOrder,
   fetchRequestForService,
   onReject,
+  onArrive,
 } = require("../controller/OrderController");
 const ProviderAuthMiddleWare = require("../Middleware/ProviderAuthMiddleWare");
 router
   .route("/orderdetail")
   .post(Authmiddleware, fetchingNearServiceProviderLocation);
 router.route("/acceptorder").post(ProviderAuthMiddleWare, acceptOrder);
+router.route("/onarrive").post(ProviderAuthMiddleWare, onArrive);
 router
   .route("/providerorderdetail")
   .get(ProviderAuthMiddleWare, fetchRequestForService);

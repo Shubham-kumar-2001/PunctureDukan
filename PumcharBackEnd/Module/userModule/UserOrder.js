@@ -13,6 +13,7 @@ const pointSchema = new Schema({
 });
 const UserOrderSchema = new Schema({
   username: String,
+  otp: String,
   serviceName: String,
   image: String,
   providerlocation: {
@@ -24,6 +25,7 @@ const UserOrderSchema = new Schema({
   distance: String,
   shopname: String,
   status: String,
+  order_id: String,
   providermobilenumber: Number,
   created: { type: Date, default: Date.now },
 });

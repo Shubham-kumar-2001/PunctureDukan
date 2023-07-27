@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import OtpInput from "react-otp-input";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useContext } from "react";
 import { useHttpClient } from "../../../Hooks/http-hook";
-import AuthContex from "../../../Store/AuthContextProvider";
 import ButtonForm from "../../../UI/buttonForm";
-const OTPForm = (props) => {
+import { useNavigate } from "react-router-dom";
+const OnArrive = (props) => {
   const { isLoading, error, sendRequest } = useHttpClient();
   const [otp, setOtp] = useState("");
-  const authCtx = useContext(AuthContex);
   const navigate = useNavigate();
   const handleError = (err) =>
     toast.error(err, {
@@ -28,12 +25,11 @@ const OTPForm = (props) => {
     }
     try {
       const data = await sendRequest(
-        `http://localhost:2020/api/puncturedukan/${props.routeUrl}`,
+        `${process.env.REACT_APP_ORDER}onarrive`,
         "POST",
         JSON.stringify({
-          code: otp,
-          mobilenumber: props.data.mobilenumber,
-          email: props.data.email,
+          otp,
+          order_id: props.serviceOrder_id,
         }),
         {
           "Content-Type": "application/json",
@@ -42,9 +38,7 @@ const OTPForm = (props) => {
       const { success, message } = data;
       if (success) {
         handleSuccess(message);
-        authCtx.login(data.token);
-        props.resetData();
-        navigate(`/${props.route}`);
+        navigate("/serviceprovider/puncturedukan/payment");
       } else {
         handleError(message);
       }
@@ -58,10 +52,7 @@ const OTPForm = (props) => {
     <div className="max-w-[350px] w-[100%] h-auto flex flex-wrap shadow rounded m-auto mt-9">
       <div className="flex flex-col w-[100%] items-center space-y-5">
         <div className="flex flex-wrap items-center flex-col mt-[.9rem] px-4">
-          <span className="text-[18px] font-normal">
-            Please enter the OTP we have{" "}
-          </span>
-          <span>send on xxxxxxxx</span>
+          <span className="text-[18px] font-normal">Please enter the OTP</span>
         </div>
         <div className="w-[100%]">
           <form
@@ -128,4 +119,4 @@ const OTPForm = (props) => {
     </div>
   );
 };
-export default OTPForm;
+export default OnArrive;

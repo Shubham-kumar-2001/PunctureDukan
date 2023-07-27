@@ -37,7 +37,7 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       const responseData = await sendRequest(
-        `${process.env.REACT_APP_PROVIDER_API}logout`
+        "http://localhost:2020/api/puncturedukan/serviceprovider/logout"
       );
       const { success, message } = responseData;
       if (success) {
@@ -67,7 +67,7 @@ const Profile = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
-          `${process.env.REACT_APP_PROVIDER_API}user`
+          "http://localhost:2020/api/puncturedukan/serviceprovider/user"
         );
         const { success, message, userData } = responseData;
         if (success) {

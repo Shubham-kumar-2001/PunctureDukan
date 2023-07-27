@@ -92,7 +92,7 @@ const AddService = () => {
     console.log(inputValue);
     try {
       const data = await sendRequest(
-        `${process.env.REACT_APP_PROVIDER_API}addservice`,
+        "http://localhost:2020/api/puncturedukan/serviceprovider/addservice",
         "POST",
         JSON.stringify({ ...inputValue }),
         {

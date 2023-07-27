@@ -34,10 +34,10 @@ const OrderPop = (props) => {
   useEffect(() => {
     clearTimer(getDeadTime());
   }, []);
-  // if (timer === "00") {
-  //   console.log(timer);
-  //   props.rejectOrder();
-  // }
+  if (timer === "00") {
+    console.log(timer);
+    props.rejectOrder();
+  }
   return (
     <div className="container mx-auto z-[9999999999999999]">
       <div className="flex flex-col justify-center p-5 relative">

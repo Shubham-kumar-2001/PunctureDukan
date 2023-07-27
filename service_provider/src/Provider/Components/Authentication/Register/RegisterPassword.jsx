@@ -38,7 +38,7 @@ const RegisterPassword = (props) => {
     }
     try {
       const data = await sendRequest(
-        `${process.env.REACT_APP_PROVIDER_API}register`,
+        "http://localhost:2020/api/puncturedukan/serviceprovider/register",
         "POST",
         JSON.stringify({ ...props.user, password: enteredPasswordValue }),
         {

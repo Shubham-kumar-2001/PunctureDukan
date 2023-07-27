@@ -11,6 +11,7 @@ const cookieParser = require("cookie-parser");
 const HomeRoute = require("./Routes/Home");
 const UserRoute = require("./Routes/user");
 const ProviderRoute = require("./Routes/provider");
+const PaymentsRoute = require("./Routes/Payments");
 const OrderRoute = require("./Routes/order");
 const cors = require("cors");
 const morgan = require("morgan");
@@ -72,6 +73,7 @@ app.use("/api/puncturedukan", HomeRoute);
 app.use("/api/puncturedukan/auth", UserRoute);
 app.use("/api/puncturedukan/serviceprovider", ProviderRoute);
 app.use("/api/puncturedukan/serviceorder", OrderRoute);
+app.use("/api/puncturedukan/payment", PaymentsRoute);
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
 });

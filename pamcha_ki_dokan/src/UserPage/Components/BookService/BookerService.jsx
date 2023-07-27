@@ -14,6 +14,7 @@ const BookService = () => {
   const location = useSelector((state) => state.location.location);
   const [providerAddress, setProviderAddress] = useState("");
   const [loading, setLoading] = useState(false);
+  const [fetch, setfetch] = useState(true);
   const [providerDetail, setProviderDetail] = useState({
     name: "",
     mobilenumber: "",
@@ -50,7 +51,7 @@ const BookService = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await serviceSendRequest(
-          `${process.env.REACT_APP_HOME}service/${service_id}`
+          `http://localhost:2020/api/puncturedukan/service/${service_id}`
         );
         setData(responseData);
       } catch (err) {
@@ -63,7 +64,7 @@ const BookService = () => {
     const fetchAddress = async () => {
       try {
         const data = await axios.get(
-          `${process.env.REACT_APP_address}${location.longitude},${location.latitude}.json?access_token=${process.env.REACT_APP_MAPBOX}`
+          `${process.env.REACT_APP_ADDRESS}${location.longitude},${location.latitude}.json?access_token=${process.env.REACT_APP_MAPBOX}`
         );
         setAddress(data.data.features[0].place_name);
       } catch (err) {
@@ -102,14 +103,14 @@ const BookService = () => {
     const fetchProviderDetail = async () => {
       try {
         const providerData = await providerSendRequest(
-          `${process.env.REACT_APP_USER_API}userorderdetail`
+          "http://localhost:2020/api/puncturedukan/auth/userorderdetail"
         );
         const { success, message, userOrderdata } = providerData;
         if (success) {
           setProviderDetail(userOrderdata);
           setLoading(false);
           const useraddr = await axios.get(
-            `${process.env.REACT_APP_address}${userOrderdata.providerlocation.coordinates[0]},${userOrderdata.providerlocation.coordinates[1]}.json?access_token=${process.env.REACT_APP_MAPBOX}`
+            `${process.env.REACT_APP_ADDRESS}${userOrderdata.providerlocation.coordinates[0]},${userOrderdata.providerlocation.coordinates[1]}.json?access_token=${process.env.REACT_APP_MAPBOX}`
           );
           setProviderAddress(useraddr.data.features[0].place_name);
           handleSuccess(message);
@@ -119,14 +120,18 @@ const BookService = () => {
       }
     };
     const intervals = setInterval(() => {
-      if (loading) {
+      if (fetch) {
         fetchProviderDetail();
-        console.log("hiiii");
+      }
+      if (providerDetail.image !== "") {
+        setfetch(false);
       }
     }, 1500);
-    return () => clearInterval(intervals);
+    return () => {
+      clearInterval(intervals);
+    };
   }, []);
-  console.log(providerDetail, "provider");
+  console.log(providerDetail, fetch, "provider");
   return (
     <>
       {loading && <LoadingSpinner asOverlay />}
@@ -254,6 +259,7 @@ const BookService = () => {
             image={providerDetail.image}
             price={providerDetail.price}
             distance={parseFloat(providerDetail.distance)}
+            otp={providerDetail.otp}
           />
         </>
       )}
