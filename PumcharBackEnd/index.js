@@ -69,11 +69,11 @@ app.use(
 );
 app.use(morgan("tiny"));
 app.disable("x-powered-by");
-app.use("/api/puncturedukan", HomeRoute);
-app.use("/api/puncturedukan/auth", UserRoute);
-app.use("/api/puncturedukan/serviceprovider", ProviderRoute);
-app.use("/api/puncturedukan/serviceorder", OrderRoute);
-app.use("/api/puncturedukan/payment", PaymentsRoute);
+app.use(`${process.env.MAIN_URL}`, HomeRoute);
+app.use(`${process.env.MAIN_URL}/auth`, UserRoute);
+app.use(`${process.env.MAIN_URL}/serviceprovider`, ProviderRoute);
+app.use(`${process.env.MAIN_URL}/serviceorder`, OrderRoute);
+app.use(`${process.env.MAIN_URL}/payment`, PaymentsRoute);
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
 });
