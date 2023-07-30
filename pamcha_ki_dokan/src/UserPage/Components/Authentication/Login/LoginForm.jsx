@@ -19,7 +19,10 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [generated, setGenerated] = useState(false);
   const [generateData, setGeneratedData] = useState();
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading: isOTPLoading, sendRequest: OTPsendRequest } =
+    useHttpClient();
+  const { isLoading: isPasswordLoading, sendRequest: passwordSendRequest } =
+    useHttpClient();
   const {
     value: enteredEmailValue,
     hasError: emailHasError,
@@ -68,7 +71,7 @@ const LoginForm = () => {
     setGeneratedData(inputValue);
     if (enteredPasswordIsValid) {
       try {
-        const data = await sendRequest(
+        const data = await passwordSendRequest(
           `${process.env.REACT_APP_USER_API}login`,
           "POST",
           JSON.stringify({ ...inputValue }),
@@ -87,11 +90,11 @@ const LoginForm = () => {
         }
       } catch (err) {
         console.log(err.message);
-        handleError(error);
+        handleError(err);
       }
     } else {
       try {
-        const data = await sendRequest(
+        const data = await OTPsendRequest(
           `${process.env.REACT_APP_USER_API}generateloginotp`,
           "POST",
           JSON.stringify({ ...inputValue }),
@@ -99,7 +102,6 @@ const LoginForm = () => {
             "Content-Type": "application/json",
           }
         );
-        console.log(data);
         const { success, message } = data;
         if (success) {
           handleSuccess(message);
@@ -221,7 +223,7 @@ const LoginForm = () => {
                     <ButtonForm
                       type="submit"
                       buttonContent={
-                        isLoading ? (
+                        isPasswordLoading ? (
                           <div role="status">
                             <svg
                               aria-hidden="true"
@@ -271,7 +273,7 @@ const LoginForm = () => {
                     <ButtonForm
                       type="submit"
                       buttonContent={
-                        isLoading ? (
+                        isOTPLoading ? (
                           <div role="status">
                             <svg
                               aria-hidden="true"

@@ -4,11 +4,25 @@ import { useHttpClient } from "../../../Hooks/http-hook";
 import { useDispatch, useSelector } from "react-redux";
 import { cartSliceActions } from "./../../../Store/cart-slice";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 // import Razorpay from "razorpay";
 const PaymentsRequest = (props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  function loadScript(src) {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  }
   const serviceInCart = useSelector((state) => state.cart);
-  console.log("props.payment.name");
   const cartServiceAddHandler = () => {
     dispatch(cartSliceActions.addServiceToCart(props.payment.price));
   };
@@ -24,8 +38,7 @@ const PaymentsRequest = (props) => {
       position: "top-right",
     });
   const { isLoading, sendRequest } = useHttpClient();
-  const { isLoading: isPaymentsLoading, sendRequest: paymentsSendRequest } =
-    useHttpClient();
+  const { sendRequest: paymentsSendRequest } = useHttpClient();
   // alert(process.env.REACT_APP_RAZOR_PAY_ID);
   const initPayment = (data) => {
     const options = {
@@ -39,10 +52,12 @@ const PaymentsRequest = (props) => {
       handler: async (response) => {
         try {
           const paymentsVerification = await paymentsSendRequest(
-            "http://localhost:2020/api/puncturedukan/payment/verifypayments",
+            `${process.env.REACT_APP_PAYMENT}verifypayments`,
             "POST",
             JSON.stringify({
-              response,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
             }),
             {
               "Content-Type": "application/json",
@@ -52,9 +67,16 @@ const PaymentsRequest = (props) => {
           const { success, message } = paymentsVerification;
           if (success) {
             handleSuccess(message);
+            localStorage.removeItem("userData");
+            localStorage.removeItem("providerData");
+            localStorage.removeItem("userAddress");
+            localStorage.removeItem("providerAddress");
+            localStorage.removeItem("acceptorder");
+            localStorage.removeItem("verifyotp");
+            navigate("/");
           }
         } catch (error) {
-          handleError(error.message + "err");
+          handleError(error.message);
         }
       },
       prefill: {
@@ -75,8 +97,16 @@ const PaymentsRequest = (props) => {
 
   const paymentsRequestHandler = async () => {
     try {
+      const res = await loadScript(
+        "https://checkout.razorpay.com/v1/checkout.js"
+      );
+
+      if (!res) {
+        alert("Razorpay SDK failed to load. Are you online?");
+        return;
+      }
       const fetchPaymentsRequest = await sendRequest(
-        "http://localhost:2020/api/puncturedukan/payment/paymentsorder",
+        `${process.env.REACT_APP_PAYMENT}paymentsorder`,
         "POST",
         JSON.stringify({
           amount: serviceInCart.totalCartPrice,

@@ -11,10 +11,9 @@ module.exports = async (req, res, next) => {
     req.user = decodeToken;
     next();
   } catch (err) {
-    console.log(err.message, process.env.TOKEN_KEY);
     res.status(401).json({
       success: false,
-      message: "Authentication Error" + err.message,
+      message: err.message,
     });
   }
 };

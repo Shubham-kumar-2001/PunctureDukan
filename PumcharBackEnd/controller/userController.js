@@ -3,8 +3,11 @@ const bcrypt = require("bcryptjs");
 const otpGenerator = require("otp-generator");
 const UserOTPVerification = require("../Module/userModule/userOTPVerification");
 const User = require("../Module/userModule/user");
-// const { OTPMailer } = require("../GenratorOTP/OTPMailer");
-// const { OTPMailer } = require("../GenratorOTP/OTPMailer");
+const { RegisterMail } = require("../GenratorOTP/OTPMailer");
+const client = require("twilio")(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 module.exports.Register = async (req, res) => {
   try {
     const { email, password, mobilenumber, firstname, lastname } = req.body;
@@ -132,7 +135,6 @@ module.exports.OTPLoginGenerator = async (req, res) => {
           },
         ],
       });
-      console.log(user);
       if (!user) {
         return res.json({
           success: false,
@@ -144,33 +146,45 @@ module.exports.OTPLoginGenerator = async (req, res) => {
         upperCaseAlphabets: false,
         specialChars: false,
       });
-      console.log(otp);
       const existingOTPUser = await UserOTPVerification.findOne({
         email,
         mobilenumber,
       });
       if (existingOTPUser) {
         const hashPassword = await bcrypt.hash(otp, 12);
-        console.log(hashPassword);
         await UserOTPVerification.findOneAndUpdate(
           { email, mobilenumber },
           {
             otp: hashPassword,
           }
         );
-        console.log("update");
       } else {
         await UserOTPVerification.create({
           email,
           mobilenumber,
           otp,
         });
-        console.log("create");
       }
-      res
-        .status(201)
-        .json({ success: true, message: "OTP send Successfully", code: otp });
-      // await OTPMailer(email, otp,res);
+      if (email) {
+        await RegisterMail({
+          username: user.username,
+          text: `Your account login code is ${otp}. Verify and login to your account and do not these code to anyone.`,
+          subject: "Account Login OTP",
+          userEmail: email,
+        });
+      } else {
+        await client.messages
+          .create({
+            body: `Your account login code is ${otp}. Verify and login to your account and do not these code to anyone.`,
+            to: `+91${mobilenumber}`,
+            from: `${process.env.TWILIO_NUMBER}`,
+          })
+          .done();
+      }
+      res.status(201).json({
+        success: true,
+        message: `OTP Send successfuly to ${email || mobilenumber}`,
+      });
     } catch (err) {
       res.json({ message: "User Not Found!" + err.message, success: false });
     }
@@ -184,7 +198,6 @@ module.exports.OTPLoginGenerator = async (req, res) => {
 module.exports.verifyLoginOTP = async (req, res) => {
   try {
     const { code, email, mobilenumber } = req.body;
-    console.log(req.body);
     try {
       const user = await User.findOne({
         $or: [
@@ -196,7 +209,6 @@ module.exports.verifyLoginOTP = async (req, res) => {
           },
         ],
       });
-      console.log(user);
       if (!user) {
         return res.json({
           success: false,
@@ -264,7 +276,6 @@ module.exports.OTPGenerator = async (req, res) => {
           },
         ],
       });
-      console.log(user);
       if (user) {
         return res.json({
           success: false,
@@ -276,34 +287,44 @@ module.exports.OTPGenerator = async (req, res) => {
         upperCaseAlphabets: false,
         specialChars: false,
       });
-      console.log(otp);
       const existingOTPUser = await UserOTPVerification.findOne({
         email,
         mobilenumber,
       });
       if (existingOTPUser) {
         const hashPassword = await bcrypt.hash(otp, 12);
-        console.log(hashPassword);
         await UserOTPVerification.findOneAndUpdate(
           { email, mobilenumber },
           {
             otp: hashPassword,
           }
         );
-        console.log("update");
       } else {
         await UserOTPVerification.create({
           email,
           mobilenumber,
           otp,
         });
-        console.log("create");
       }
-
-      res
-        .status(201)
-        .json({ success: true, message: "OTP send Successfully", code: otp });
-      // await OTPMailer(email, otp,res);
+      if (email) {
+        await RegisterMail({
+          username: user.username,
+          text: `Email Verification code is ${otp}. Verify and login to your account.`,
+          subject: "Verify your Email account",
+          userEmail: email,
+        });
+      } else {
+        await client.messages.create({
+          body: `Your Mobile number verification code is ${otp}. Verify and login to your account.`,
+          to: `+91${mobilenumber}`,
+          from: `${process.env.TWILIO_NUMBER}`,
+        });
+        // .done();
+      }
+      res.status(201).json({
+        success: true,
+        message: `OTP Send successfuly to ${email || mobilenumber}`,
+      });
     } catch (err) {
       res.json({ message: "User Not Found!" + err.message, success: false });
     }
@@ -317,7 +338,6 @@ module.exports.OTPGenerator = async (req, res) => {
 module.exports.verifyOTP = async (req, res) => {
   try {
     const { code, email, mobilenumber } = req.body;
-    console.log(req.body);
     const otpHolder = await UserOTPVerification.findOne({
       email,
       mobilenumber,

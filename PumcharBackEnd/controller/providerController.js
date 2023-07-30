@@ -1,11 +1,14 @@
 const ProviderAuth = require("../Module/Provider/providerAuth");
 const ProviderOTPVerification = require("../Module/Provider/providerOTPVerification");
-const Provider = require("../Module/Provider/providerService");
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcryptjs");
 const { createProviderSecretToken } = require("../utility/providerJWT");
 const Services = require("../Module/Home/services");
 const ProviderService = require("../Module/Provider/providerService");
+const client = require("twilio")(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 module.exports.Register = async (req, res) => {
   try {
     const { email, password, mobilenumber, firstname, lastname } = req.body;
@@ -90,13 +93,7 @@ module.exports.Login = async (req, res) => {
           message: "Incorrect password or email",
         });
       }
-      // const { username } = provider.username;
-      // await ProviderAuth.findOneAndUpdate(
-      //   { username },
-      //   {
-      //     isActive: true,
-      //   }
-      // );
+
       const token = createProviderSecretToken(provider.username);
       res.cookie("providerjwt", token, {
         withCredentials: true,
@@ -150,34 +147,43 @@ module.exports.OTPLoginGenerator = async (req, res) => {
         upperCaseAlphabets: false,
         specialChars: false,
       });
-      console.log(otp);
       const existingOTPUser = await ProviderOTPVerification.findOne({
         email,
         mobilenumber,
       });
       if (existingOTPUser) {
         const hashPassword = await bcrypt.hash(otp, 12);
-        console.log(hashPassword);
         await ProviderOTPVerification.findOneAndUpdate(
           { email, mobilenumber },
           {
             otp: hashPassword,
           }
         );
-        console.log("update");
       } else {
         await ProviderOTPVerification.create({
           email,
           mobilenumber,
           otp,
         });
-        console.log("create");
       }
-      res
-        .status(201)
-        .json({ success: true, message: "OTP send Successfully", code: otp });
-
-      // await OTPMailer(email, otp,res);
+      if (email) {
+        await RegisterMail({
+          username: user.username,
+          text: `Your account login code is ${otp}. Verify and login to your account and do not these code to anyone.`,
+          subject: "Account Login OTP",
+          userEmail: email,
+        });
+      } else {
+        await client.messages.create({
+          body: `Your account login code is ${otp}. Verify and login to your account and do not these code to anyone.`,
+          to: `+91${mobilenumber}`,
+          from: `${process.env.TWILIO_NUMBER}`,
+        });
+      }
+      res.status(201).json({
+        success: true,
+        message: `OTP Send successfuly to ${email || mobilenumber}`,
+      });
     } catch (err) {
       res.json({ message: "User Not Found!" + err.message, success: false });
     }
@@ -191,7 +197,6 @@ module.exports.OTPLoginGenerator = async (req, res) => {
 module.exports.verifyLoginOTP = async (req, res) => {
   try {
     const { code, email, mobilenumber } = req.body;
-    console.log(req.body, "ghghgh");
     try {
       const provider = await ProviderAuth.findOne({
         $or: [
@@ -230,14 +235,11 @@ module.exports.verifyLoginOTP = async (req, res) => {
         await ProviderOTPVerification.findByIdAndDelete(otpHolder._id);
       }
       const token = createProviderSecretToken(user.username);
-      // const { username } = provider.username;
-      // await ProviderAuth.findOneAndUpdate({ username }, { isActive: true });
       res.cookie("providerjwt", token, {
         withCredentials: true,
         httpOnly: true,
         secure: true,
         maxAge: 7 * 24 * 3600 * 1000,
-        // path: "/serviceprovider",
       });
       res.status(201).json({
         message: "User logged in successfully",
@@ -284,34 +286,43 @@ module.exports.OTPGenerator = async (req, res) => {
         upperCaseAlphabets: false,
         specialChars: false,
       });
-      console.log(otp);
       const existingOTPUser = await ProviderOTPVerification.findOne({
         email,
         mobilenumber,
       });
       if (existingOTPUser) {
         const hashPassword = await bcrypt.hash(otp, 12);
-        console.log(hashPassword);
         await ProviderOTPVerification.findOneAndUpdate(
           { email, mobilenumber },
           {
             otp: hashPassword,
           }
         );
-        console.log("update");
       } else {
         await ProviderOTPVerification.create({
           email,
           mobilenumber,
           otp,
         });
-        console.log("create");
       }
-      res
-        .status(201)
-        .json({ success: true, message: "OTP send Successfully", code: otp });
-
-      // await OTPMailer(email, otp,res);
+      if (email) {
+        await RegisterMail({
+          username: user.username,
+          text: `Email Verification code is ${otp}. Verify and login to your account.`,
+          subject: "Verify your Email account",
+          userEmail: email,
+        });
+      } else {
+        await client.messages.create({
+          body: `Your Mobile number verification code is ${otp}. Verify and login to your account.`,
+          to: `+91${mobilenumber}`,
+          from: `${process.env.TWILIO_NUMBER}`,
+        });
+      }
+      res.status(201).json({
+        success: true,
+        message: `OTP Send successfuly to ${email || mobilenumber}`,
+      });
     } catch (err) {
       console.log(err.message);
       res.status(404).json({ message: "User error!", success: false });
@@ -326,7 +337,6 @@ module.exports.OTPGenerator = async (req, res) => {
 module.exports.verifyOTP = async (req, res) => {
   try {
     const { code, email, mobilenumber } = req.body;
-    console.log(req.body);
     const otpHolder = await ProviderOTPVerification.findOne({
       email,
       mobilenumber,
@@ -418,9 +428,7 @@ module.exports.updateUser = async (req, res) => {
 module.exports.serviceProvidedByProvider = async (req, res) => {
   try {
     const { username } = req.provider;
-    console.log(username);
     const { servicename, latitude, longitude, shopname, price } = req.body;
-    console.log(req.body);
     const user = await ProviderAuth.findOne({ username });
     if (!user) {
       return res

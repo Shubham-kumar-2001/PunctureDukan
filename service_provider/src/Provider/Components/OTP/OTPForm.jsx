@@ -28,7 +28,7 @@ const OTPForm = (props) => {
     }
     try {
       const data = await sendRequest(
-        `http://localhost:2020/api/puncturedukan/${props.routeUrl}`,
+        `${process.env.REACT_APP_PROVIDER_API}${props.routeUrl}`,
         "POST",
         JSON.stringify({
           code: otp,

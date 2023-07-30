@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import OtpInput from "react-otp-input";
 import { toast } from "react-toastify";
-import { useHttpClient } from "../../../Hooks/http-hook";
-import ButtonForm from "../../../UI/buttonForm";
+import { useHttpClient } from "../../../../Hooks/http-hook";
+import ButtonForm from "../../../../UI/buttonForm";
 import { useNavigate } from "react-router-dom";
-const OnArrive = (props) => {
+const OnArriveOTP = (props) => {
+  console.log(props);
   const { isLoading, error, sendRequest } = useHttpClient();
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
@@ -119,4 +120,4 @@ const OnArrive = (props) => {
     </div>
   );
 };
-export default OnArrive;
+export default OnArriveOTP;

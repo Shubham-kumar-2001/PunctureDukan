@@ -60,7 +60,7 @@ const MapBoxLocation = () => {
     }
   }, [!location.latitude && !location.longitude]);
 
-  console.log(mapRef.current, "current");
+  // console.log(mapRef.current, "current");
   return (
     <>
       <Map

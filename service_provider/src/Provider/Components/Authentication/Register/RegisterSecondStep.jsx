@@ -41,7 +41,7 @@ const RegisterSecondStep = (props) => {
 
     try {
       const data = await sendRequest(
-        "http://localhost:2020/api/puncturedukan/serviceprovider/generateotp",
+        `${process.env.REACT_APP_PROVIDER_API}generateotp`,
         "POST",
         JSON.stringify({ email: enteredEmailValue }),
         {
@@ -147,7 +147,7 @@ const RegisterSecondStep = (props) => {
         <OTPForm
           data={generateData}
           route="serviceprovider/puncturedukan/register/third"
-          routeUrl="serviceprovider/verifyotp"
+          routeUrl="verifyotp"
           resetData={resetData}
         />
       )}

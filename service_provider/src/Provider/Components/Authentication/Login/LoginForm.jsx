@@ -75,7 +75,7 @@ const LoginForm = () => {
     if (enteredPasswordIsValid) {
       try {
         const data = await passwordSendRequest(
-          "http://localhost:2020/api/puncturedukan/serviceprovider/login",
+          `${process.env.REACT_APP_PROVIDER_API}login`,
           "POST",
           JSON.stringify({ ...inputValue }),
           {
@@ -98,14 +98,13 @@ const LoginForm = () => {
     } else {
       try {
         const data = await OTPSendRequest(
-          "http://localhost:2020/api/puncturedukan/serviceprovider/generateloginotp",
+          `${process.env.REACT_APP_PROVIDER_API}generateloginotp`,
           "POST",
           JSON.stringify({ ...inputValue }),
           {
             "Content-Type": "application/json",
           }
         );
-        console.log(data);
         const { success, message } = data;
         if (success) {
           handleSuccess(message);
@@ -299,7 +298,7 @@ const LoginForm = () => {
       {generated && (
         <OTPForm
           data={generateData}
-          routeUrl="serviceprovider/verifyloginotp"
+          routeUrl="verifyloginotp"
           resetData={resetData}
           route="serviceprovider/puncturedukan"
         />

@@ -16,9 +16,11 @@ import {
 } from "react-router-dom";
 import ContactUs from "../Components/ContactUs/ContactUs";
 import AddService from "../Components/AddService/AddService";
-import Order from "../Components/Order/Order";
-import OrderModelPOPUP from "../Components/Order/OrderModelPOPUP.jsx";
 import PaymentsRequest from "../Components/Payments/PaymentsRequest";
+import OrderModelPOPUP from "./../Components/Order/OrderPop/OrderModelPOPUP.jsx";
+import UserOrderData from "../Components/Order/UserOrderData/UserOrder";
+import OnArriveOTP from "../Components/Order/OTP/OnArriveOTP";
+import Order from "./../Components/Order/OrderDeatil/Order";
 const RoutesProvider = () => {
   const [user, setUser] = useState({});
   const updateUser = (data) => {
@@ -28,7 +30,9 @@ const RoutesProvider = () => {
     setUser({});
   };
   const [payment, setPayment] = useState();
-  const [verify, setVerify] = useState(false);
+  const [serviceOrder_id, setServiceOrder_id] = useState();
+  // const [verify, setVerify] = useState(false);
+  console.log(payment);
   const routesForPublic = [
     {
       element: <RouterLayout />,
@@ -65,10 +69,31 @@ const RoutesProvider = () => {
             {
               path: "/serviceprovider/puncturedukan/locate",
               element: (
-                <OrderModelPOPUP
-                  setVerify={setVerify}
-                  setPayment={setPayment}
-                />
+                <OrderModelPOPUP setServiceOrder_id={setServiceOrder_id} />
+              ),
+            },
+            {
+              path: "/serviceprovider/puncturedukan/orderdata",
+              element: localStorage.getItem("acceptorder") ? (
+                <UserOrderData setPayment={setPayment} />
+              ) : (
+                <Navigate replace to="/serviceprovider/puncturedukan/locate" />
+              ),
+            },
+            {
+              path: "/serviceprovider/puncturedukan/otpverify",
+              element: localStorage.getItem("acceptorder") ? (
+                <OnArriveOTP serviceOrder_id={serviceOrder_id} />
+              ) : (
+                <Navigate replace to="/serviceprovider/puncturedukan/locate" />
+              ),
+            },
+            {
+              path: "/serviceprovider/puncturedukan/payment",
+              element: localStorage.getItem("verifyotp") ? (
+                <PaymentsRequest payment={payment} />
+              ) : (
+                <Navigate replace to="/serviceprovider/puncturedukan/locate" />
               ),
             },
             {
@@ -86,14 +111,6 @@ const RoutesProvider = () => {
             {
               path: "/serviceprovider/puncturedukan/addservice",
               element: <AddService />,
-            },
-            {
-              path: "/serviceprovider/puncturedukan/payment",
-              element: verify ? (
-                <PaymentsRequest payment={payment} />
-              ) : (
-                <Navigate replace to="/serviceprovider/puncturedukan/locate" />
-              ),
             },
           ],
         },

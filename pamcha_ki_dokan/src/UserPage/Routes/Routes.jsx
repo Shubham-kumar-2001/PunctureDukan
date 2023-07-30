@@ -5,7 +5,6 @@ import ContactUs from "../Components/ContactUs/ContactUs";
 import LocateWithIp from "../Components/Map/LocateWithIP";
 import Profile from "../Components/profile/Profile";
 import Order from "../Components/Order/Order";
-import BookService from "../Components/BookService/BookerService";
 import Login from "../Components/Authentication/Login/Login";
 import RegisterFirstStep from "../Components/Authentication/Register/RegisterFirst";
 import RegisterSecondStep from "../Components/Authentication/Register/RegisterSecondStep";
@@ -19,6 +18,8 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
+import ProviderDetail from "../Components/BookService/ProviderData/ProviderDetail";
+import BookService from "../Components/BookService/Service/BookerService";
 const Routes = () => {
   const [user, setUser] = useState({});
   const updateUser = (data) => {
@@ -83,6 +84,10 @@ const Routes = () => {
             {
               path: "/puncturedukan/order",
               element: <Order />,
+            },
+            {
+              path: "/puncturedukan/providerdetail",
+              element: <ProviderDetail />,
             },
             {
               path: "/puncturedukan/service/:service_id",

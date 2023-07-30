@@ -1,6 +1,6 @@
 import React from "react";
 import ListOrder from "./list";
-import { orderData } from "./../../../Data/index";
+import { orderData } from "../../../../Data/index";
 const Order = () => {
   return (
     <div className="container mx-auto">

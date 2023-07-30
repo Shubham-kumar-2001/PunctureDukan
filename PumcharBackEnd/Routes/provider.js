@@ -15,6 +15,8 @@ const {
 } = require("../controller/providerController");
 const ProviderAuthMiddleWare = require("../Middleware/ProviderAuthMiddleWare");
 const { fetchProviderOrderDetail } = require("../controller/OrderController");
+const { RegisterMail } = require("../GenratorOTP/OTPMailer");
+const { sendMessage } = require("../GenratorOTP/mobileOTP");
 router.route("/register").post(Register);
 router.route("/login").post(Login);
 router.route("/generateloginotp").post(OTPLoginGenerator);

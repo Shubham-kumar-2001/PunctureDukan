@@ -1,61 +1,49 @@
 const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
-
-module.exports.OTPMailer = (email, OTP, res) => {
-  let nodeConfig = {
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  };
-
-  transporter = nodemailer.createTransport(nodeConfig);
-
-  MailGenerator = new Mailgen({
-    theme: "default",
-    product: {
-      name: "Mailgen",
-      link: "https://mailgen.js/",
-    },
-  });
-
+module.exports.RegisterMail = async (
+  { username, userEmail, text, subject },
+  next
+) => {
   try {
-    let response = {
-      body: {
-        intro:
-          "Welcome to PunctureDokan! We're very excited to have you on board.",
-        action: {
-          instructions:
-            "To get started with PunctureDokan,Please confirum your Email",
-          button: {
-            color: "#fff",
-            text: `${OTP}`,
-            border: "2px solid black",
-          },
-        },
-        outro: "OTP will expire with in 15 minutes",
+    let config = {
+      service: "gmail",
+      auth: {
+        user: process.env.NODEMAIL_EMAIL,
+        pass: process.env.NODEMAIL_PASSWORD,
       },
     };
-    let emailBody = MailGenerator.generate(response);
-    let emailMessage = {
-      from: process.env.EMAIL,
-      to: email,
-      subject: "Email verification Code",
-      html: emailBody,
+
+    let transporter = nodemailer.createTransport(config);
+
+    let MailGenerator = new Mailgen({
+      theme: "default",
+      product: {
+        name: "Mailgen",
+        link: "https://mailgen.js/",
+      },
+    });
+
+    let response = {
+      body: {
+        name: username,
+        intro:
+          text ||
+          "Welcome to Daily Tuition! We're very excited to have you on board.",
+        outro:
+          "Need help, or have questions? Just reply to this email, we'd love to help.",
+      },
     };
-    transporter
-      .sendMail(emailMessage)
-      .then(() => {
-        return res.status(200).json({
-          success: "Pending",
-          msessage: "You should receive an email from us.",
-        });
-      })
-      .catch((error) => res.send({ success: false, message: error.message }));
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+
+    let mail = await MailGenerator.generate(response);
+
+    let message = {
+      from: process.env.NODEMAIL_EMAIL,
+      to: userEmail,
+      subject: subject || "Signup Successful",
+      html: mail,
+    };
+    await transporter.sendMail(message);
+  } catch (err) {
+    next(err);
   }
 };
