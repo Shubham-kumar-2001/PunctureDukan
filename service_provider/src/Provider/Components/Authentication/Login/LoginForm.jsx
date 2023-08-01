@@ -301,6 +301,7 @@ const LoginForm = () => {
           routeUrl="verifyloginotp"
           resetData={resetData}
           route="serviceprovider/puncturedukan"
+          otpRoute="generateloginotp"
         />
       )}
     </>

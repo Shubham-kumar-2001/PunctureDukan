@@ -4,17 +4,29 @@ import WhenEverGridLoader from "./WhenEverGridLoading";
 import WhenEverHeadingLoader from "./WhenEverGridLoader";
 import { useHttpClient } from "../../../Hooks/http-hook";
 import ErrorModule from "../../../ErrorModule/ErrorModule";
+import { toast } from "react-toastify";
 const WhenEverWhereEver = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [whenEverData, setWhenEverData] = useState([]);
+  const handleError = (err) =>
+    toast.error(err, {
+      position: "top-right",
+    });
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
           `${process.env.REACT_APP_HOME}whenever&whereever`
         );
-        setWhenEverData(responseData);
-      } catch (err) {}
+        const { success, message, whenEver } = responseData;
+        if (success) {
+          setWhenEverData(whenEver);
+        } else {
+          handleError(message);
+        }
+      } catch (err) {
+        handleError(error);
+      }
     };
     fetchUsers();
   }, [sendRequest]);

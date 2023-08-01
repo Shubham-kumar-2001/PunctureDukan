@@ -40,7 +40,12 @@ const BookService = () => {
         const responseData = await serviceSendRequest(
           `http://localhost:2020/api/puncturedukan/service/${service_id}`
         );
-        setData(responseData);
+        const { success, message, service } = responseData;
+        if (success) {
+          setData(service);
+        } else {
+          handleError(message);
+        }
       } catch (err) {
         handleError(serviceError);
       }
@@ -54,9 +59,7 @@ const BookService = () => {
           `${process.env.REACT_APP_ADDRESS}${location.longitude},${location.latitude}.json?access_token=${process.env.REACT_APP_MAPBOX}`
         );
         setAddress(data.data.features[0].place_name);
-      } catch (err) {
-        handleError("Enable Your Location");
-      }
+      } catch (err) {}
     };
     fetchAddress();
   }, [location.longitude, location.latitude]);
@@ -102,7 +105,7 @@ const BookService = () => {
               <BookServiceInfo
                 address={address}
                 image={data.image}
-                name={data.name}
+                name={data.servicename}
                 price={data.price}
               />
 

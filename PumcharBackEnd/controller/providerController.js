@@ -5,10 +5,10 @@ const bcrypt = require("bcryptjs");
 const { createProviderSecretToken } = require("../utility/providerJWT");
 const Services = require("../Module/Home/services");
 const ProviderService = require("../Module/Provider/providerService");
-const client = require("twilio")(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-);
+// const client = require("twilio")(
+//   process.env.TWILIO_ACCOUNT_SID,
+//   process.env.TWILIO_AUTH_TOKEN
+// );
 module.exports.Register = async (req, res) => {
   try {
     const { email, password, mobilenumber, firstname, lastname } = req.body;
@@ -174,11 +174,15 @@ module.exports.OTPLoginGenerator = async (req, res) => {
           userEmail: email,
         });
       } else {
-        await client.messages.create({
-          body: `Your account login code is ${otp}. Verify and login to your account and do not these code to anyone.`,
-          to: `+91${mobilenumber}`,
-          from: `${process.env.TWILIO_NUMBER}`,
+        await sendMessage({
+          mobilenumber: mobilenumber,
+          message: `Mobile Number verification code is ${otp} Do not share it`,
         });
+        // await client.messages.create({
+        //   body: `Your account login code is ${otp}. Verify and login to your account and do not these code to anyone.`,
+        //   to: `+91${mobilenumber}`,
+        //   from: `${process.env.TWILIO_NUMBER}`,
+        // });
       }
       res.status(201).json({
         success: true,
@@ -307,17 +311,20 @@ module.exports.OTPGenerator = async (req, res) => {
       }
       if (email) {
         await RegisterMail({
-          username: user.username,
           text: `Email Verification code is ${otp}. Verify and login to your account.`,
           subject: "Verify your Email account",
           userEmail: email,
         });
       } else {
-        await client.messages.create({
-          body: `Your Mobile number verification code is ${otp}. Verify and login to your account.`,
-          to: `+91${mobilenumber}`,
-          from: `${process.env.TWILIO_NUMBER}`,
+        await sendMessage({
+          mobilenumber: mobilenumber,
+          message: `Mobile Number verification code is ${otp} Do not share it`,
         });
+        // await client.messages.create({
+        //   body: `Your Mobile number verification code is ${otp}. Verify and login to your account.`,
+        //   to: `+91${mobilenumber}`,
+        //   from: `${process.env.TWILIO_NUMBER}`,
+        // });
       }
       res.status(201).json({
         success: true,
@@ -404,24 +411,37 @@ module.exports.getUserData = async (req, res) => {
 module.exports.updateUser = async (req, res) => {
   try {
     const { username } = req.provider;
-    const { mobilenumber, email, ...restData } = req.body;
-    if (username) {
-      const updateUser = await ProviderAuth.findByUsername(
-        { username },
-        restData
-      );
-      await updateUser.save();
-      return res.status(201).json({
-        message: "Successfully Uodated....!!!",
-        success: true,
-      });
-    } else {
+    const { mobilenumber, email, firstname, lastname, gender, avatar } =
+      req.body;
+    const user = await ProviderAuth.findOne({ username });
+    if (!user) {
       return res
-        .status(401)
-        .json({ message: "User Not Found", success: false });
+        .status(501)
+        .json({ success: false, message: "Couldn't find the User" });
     }
+    const mobileNumber = await ProviderAuth.findOne({ mobilenumber });
+    if (mobileNumber && mobileNumber.username !== username) {
+      return res
+        .status(501)
+        .json({ success: false, message: "Mobile Number already Exist" });
+    }
+    const Email = await ProviderAuth.findOne({ email });
+    if (Email && Email.username !== username) {
+      return res
+        .status(501)
+        .json({ success: false, message: "Email already Exist" });
+    }
+    await ProviderAuth.findOneAndUpdate(
+      { username },
+      { mobilenumber, email, firstname, lastname, gender, avatar }
+    );
+
+    return res.status(201).json({
+      message: "Successfully Updated....!!!",
+      success: true,
+    });
   } catch (err) {
-    res.status(404).json({ success: false, message: err.message });
+    res.status(401).json({ success: false, message: err.message });
   }
 };
 

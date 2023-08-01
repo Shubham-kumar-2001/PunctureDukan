@@ -20,6 +20,8 @@ import {
 } from "react-router-dom";
 import ProviderDetail from "../Components/BookService/ProviderData/ProviderDetail";
 import BookService from "../Components/BookService/Service/BookerService";
+import Page404 from "../Components/Page404/page404";
+import AboutService from "../Components/AboutService/AboutService";
 const Routes = () => {
   const [user, setUser] = useState({});
   const updateUser = (data) => {
@@ -47,15 +49,16 @@ const Routes = () => {
         },
         {
           path: "/puncturedukan/about",
-          element: <div>About Us</div>,
+          element: <AboutService />,
         },
         {
           path: "/puncturedukan/contactus",
           element: <ContactUs />,
         },
+
         {
           path: "*",
-          element: <div>Page not Found</div>,
+          element: <Page404 />,
         },
       ],
     },

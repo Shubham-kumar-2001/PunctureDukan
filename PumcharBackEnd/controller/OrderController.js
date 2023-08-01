@@ -11,9 +11,7 @@ const GeoNear = require("../Module/Order/GeoNearData");
 module.exports.fetchingNearServiceProviderLocation = async (req, res) => {
   try {
     const { longitude, latitude, servicename } = req.body;
-    console.log(req.body);
     const { username } = req.user;
-    console.log(req.body);
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(401).json({ success: false, message: "Invalid user" });
@@ -62,32 +60,32 @@ module.exports.fetchingNearServiceProviderLocation = async (req, res) => {
 module.exports.fetchRequestForService = async (req, res) => {
   try {
     const provider = await GeoNear.findOne({});
-    // console.log(provider)
+    console.log(provider);
     res.status(201).json({ success: true, provider });
   } catch (err) {
     console.log(err.message);
-    res.status(501).json({ success: false, message: err.message });
+    res.status(501).json({ success: false, message: err.message + "ghjgj" });
   }
 };
 
 module.exports.onReject = async (req, res) => {
   try {
     const { order_id, username } = req.body;
-    console.log(req.body);
-    const provider = await GeoNear.findByIdAndUpdate(
-      { _id: order_id },
-      { $pull: { Geonear: { username } } },
-      { new: true }
-    );
-    if (provider.length == 0) {
-      return res
-        .status(301)
-        .json({ success: false, message: "No Provider Found" });
+    const providerData = await GeoNear.findById({ _id: order_id });
+    if (providerData.Geonear.length === 1) {
+      await GeoNear.findByIdAndDelete({ _id: order_id });
+    } else {
+      await GeoNear.findByIdAndUpdate(
+        { _id: order_id },
+        { $pull: { Geonear: { username } } },
+        { new: true }
+      );
     }
     res
       .status(201)
       .json({ success: true, message: "Successfully skip the service" });
   } catch (err) {
+    console.log(err.message);
     res.status(501).json({ success: false, message: "Something went wrong" });
   }
 };
@@ -186,12 +184,10 @@ module.exports.acceptOrder = async (req, res) => {
 module.exports.fetchUserOrderDetail = async (req, res) => {
   try {
     const { username } = req.user;
-    // console.log;
     const userOrderdata = await UserOrder.findOne({ username });
     if (!userOrderdata) {
       return res.status(501).json({ success: false, message: "Invalid User" });
     }
-    console.log(userOrderdata);
     await UserOrder.findOneAndDelete({ username });
     res.status(201).json({
       success: true,

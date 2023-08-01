@@ -40,9 +40,7 @@ const MapBoxLocation = () => {
                     ],
                   });
                 }, 200);
-              } catch (err) {
-                handleError("Updating Location");
-              }
+              } catch (err) {}
               dispatch(
                 mapAction.newPlace({
                   latitude: position.coords.latitude,

@@ -9,6 +9,7 @@ module.exports = async (req, res, next) => {
     req.provider = decodeToken;
     next();
   } catch (err) {
+    console.log(err.message);
     return res.status(401).json({
       success: false,
       message: "Authentication Error" + err.message,

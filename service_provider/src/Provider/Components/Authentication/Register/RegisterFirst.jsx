@@ -153,6 +153,7 @@ const RegisterFirstStep = (props) => {
           route="serviceprovider/puncturedukan/register/second"
           routeUrl="verifyotp"
           resetData={resetData}
+          otpRoute="generateotp"
         />
       )}
     </>

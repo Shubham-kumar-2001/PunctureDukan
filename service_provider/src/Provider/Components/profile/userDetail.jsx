@@ -61,11 +61,23 @@ const UserDetail = (props) => {
         <div className="flex items-start space-x-2">
           <RadioInput
             label="Male"
-            checked="checked"
+            value="Male"
+            checked={props.userData.gender === "Male" ? true : false}
             className="text-zinc-600"
             disabled="disabled"
           />
-          <RadioInput label="Female" disabled="disabled" />
+          <RadioInput
+            label="Female"
+            value="Female"
+            checked={props.userData.gender === "Female" ? true : false}
+            disabled="disabled"
+          />
+          <RadioInput
+            label="Other"
+            value="Other"
+            checked={props.userData.gender === "Other" ? true : false}
+            disabled="disabled"
+          />
         </div>
       </div>
       <div className="flex flex-col items-start ml-[2rem] space-y-4">

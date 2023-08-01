@@ -23,8 +23,9 @@ const userSchema = new Schema({
   },
   firstname: { type: String, required: [true, "FirstName can not be blank"] },
   lastname: { type: String, required: [true, "LastName can not be blank"] },
-  address: { type: String },
+  avatar: { type: String },
   profile: { type: String },
+  gender: String,
   created: { type: Date, default: Date.now },
 });
 userSchema.pre("save", async function () {

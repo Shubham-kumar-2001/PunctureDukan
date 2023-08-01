@@ -5,18 +5,44 @@ import NavLinks from "./NavLinks";
 import SideDrawer from "./SideDrawer";
 import "./MainNavLink.css";
 import ProfileDropDown from "../ProfileDropDown/ProfileDropDown";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { useContext } from "react";
 import AuthContex from "../../../../Store/AuthContextProvider";
 import Backdrop from "./../../../../UIElements/Backdrop";
-import MobileDrawer from "../MobileNav/MobileDrawer";
+import MobileDrawer from "./../MobileNav/MobileDrawer";
+import { useHttpClient } from "../../../../Hooks/http-hook";
+import MobileDrawerLoader from "../MobileNav/MobileDrawLoader";
 
 const MainNavigation = (props) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const authCtx = useContext(AuthContex);
-
-  const openDrawerHandler = () => {
+  const [credentialMobilenav, setCredentialMobilenav] = useState([]);
+  const [userMobileNav, setUserMobileNav] = useState([]);
+  const [authorized, setAuthorized] = useState([]);
+  const [notAuthorized, setNotAuthorized] = useState([]);
+  const { isLoading, error, sendRequest } = useHttpClient();
+  const handleError = (err) =>
+    toast.error(err, {
+      position: "top-right",
+    });
+  const openDrawerHandler = async () => {
     setDrawerIsOpen(true);
+    try {
+      const responseData = await sendRequest(
+        `${process.env.REACT_APP_HOME}navdata`
+      );
+      const { success, message, headerNav } = responseData;
+      if (success) {
+        setCredentialMobilenav(headerNav[5]);
+        setUserMobileNav(headerNav[1]);
+        setAuthorized(headerNav[2]);
+        setNotAuthorized(headerNav[3]);
+      } else {
+        handleError(message);
+      }
+    } catch (err) {
+      handleError(error);
+    }
   };
 
   const closeDrawerHandler = () => {
@@ -28,10 +54,17 @@ const MainNavigation = (props) => {
       <ToastContainer />
       {drawerIsOpen && <Backdrop onClick={closeDrawerHandler} />}
       <SideDrawer show={drawerIsOpen}>
-        <MobileDrawer
-          onClick={closeDrawerHandler}
-          setDrawerIsOpen={setDrawerIsOpen}
-        />
+        {isLoading && <MobileDrawerLoader />}
+        {!isLoading && (
+          <MobileDrawer
+            onClick={closeDrawerHandler}
+            setDrawerIsOpen={setDrawerIsOpen}
+            credentialMobilenav={credentialMobilenav}
+            userMobileNav={userMobileNav}
+            authorized={authorized}
+            notAuthorized={notAuthorized}
+          />
+        )}
       </SideDrawer>
 
       <HeaderContainer>

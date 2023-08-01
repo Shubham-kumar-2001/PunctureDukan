@@ -4,14 +4,14 @@ const otpGenerator = require("otp-generator");
 const UserOTPVerification = require("../Module/userModule/userOTPVerification");
 const User = require("../Module/userModule/user");
 const { RegisterMail } = require("../GenratorOTP/OTPMailer");
-const client = require("twilio")(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-);
+const { sendMessage } = require("../GenratorOTP/mobileOTP");
+// const client = require("twilio")(
+//   process.env.TWILIO_ACCOUNT_SID,
+//   process.env.TWILIO_AUTH_TOKEN
+// );
 module.exports.Register = async (req, res) => {
   try {
     const { email, password, mobilenumber, firstname, lastname } = req.body;
-    console.log(req.body);
     const existingUser = await User.findOne({
       $or: [
         {
@@ -66,7 +66,6 @@ module.exports.Login = async (req, res) => {
     if ((!email && !mobilenumber) || !password) {
       return res.json({ success: false, message: "All fields are required" });
     }
-    console.log(req.body);
     try {
       const user = await User.findOne({
         $or: [
@@ -85,14 +84,12 @@ module.exports.Login = async (req, res) => {
         });
       }
       const auth = await bcrypt.compare(password, user.password);
-      console.log(auth);
       if (!auth) {
         return res.json({
           success: false,
           message: "Incorrect password or email",
         });
       }
-      console.log(user, "bolll");
       const token = createSecretToken(user.username);
       res.cookie("userjwt", token, {
         withCredentials: true,
@@ -100,7 +97,6 @@ module.exports.Login = async (req, res) => {
         secure: true,
         maxAge: 7 * 24 * 3600 * 1000,
       });
-      // req.session.username = user.username;
       res.status(201).json({
         message: "User logged in successfully",
         success: true,
@@ -173,13 +169,15 @@ module.exports.OTPLoginGenerator = async (req, res) => {
           userEmail: email,
         });
       } else {
-        await client.messages
-          .create({
-            body: `Your account login code is ${otp}. Verify and login to your account and do not these code to anyone.`,
-            to: `+91${mobilenumber}`,
-            from: `${process.env.TWILIO_NUMBER}`,
-          })
-          .done();
+        await sendMessage({
+          mobilenumber: mobilenumber,
+          message: `Mobile Number verification code is ${otp} Do not share it`,
+        });
+        // await client.messages.create({
+        //   body: `Your account login code is ${otp}. Verify and login to your account and do not these code to anyone.`,
+        //   to: `+91${mobilenumber}`,
+        //   from: `${process.env.TWILIO_NUMBER}`,
+        // });
       }
       res.status(201).json({
         success: true,
@@ -308,18 +306,20 @@ module.exports.OTPGenerator = async (req, res) => {
       }
       if (email) {
         await RegisterMail({
-          username: user.username,
           text: `Email Verification code is ${otp}. Verify and login to your account.`,
           subject: "Verify your Email account",
           userEmail: email,
         });
       } else {
-        await client.messages.create({
-          body: `Your Mobile number verification code is ${otp}. Verify and login to your account.`,
-          to: `+91${mobilenumber}`,
-          from: `${process.env.TWILIO_NUMBER}`,
+        await sendMessage({
+          mobilenumber: mobilenumber,
+          message: `Mobile Number verification code is ${otp} Do not share it`,
         });
-        // .done();
+        // await client.messages.create({
+        //   body: `Your Mobile number verification code is ${otp}. Verify and login to your account.`,
+        //   to: `+91${mobilenumber}`,
+        //   from: `${process.env.TWILIO_NUMBER}`,
+        // });
       }
       res.status(201).json({
         success: true,
@@ -376,7 +376,6 @@ module.exports.logout = async (req, res) => {
       res.json({ success: false, message: "Invalid user" });
     }
     await res.clearCookie("userjwt");
-    // req.session.destroy();
     res.status(201).json({ success: true, message: "Logout Successfully" });
   } catch (err) {
     res
@@ -405,19 +404,34 @@ module.exports.getUserData = async (req, res) => {
 module.exports.updateUser = async (req, res) => {
   try {
     const { username } = req.user;
-    const { mobilenumber, email, ...restData } = req.body;
-    if (username) {
-      const updateUser = await User.findByUsername({ username }, restData);
-      await updateUser.save();
-      return res.status(201).json({
-        message: "Successfully Uodated....!!!",
-        success: true,
-      });
-    } else {
+    const { mobilenumber, email, firstname, lastname, gender, avatar } =
+      req.body;
+    const user = await User.findOne({ username });
+    if (!user) {
       return res
-        .status(401)
-        .json({ message: "User Not Found", success: false });
+        .status(501)
+        .json({ success: false, message: "Couldn't find the User" });
     }
+    const mobileNumber = await User.findOne({ mobilenumber });
+    if (mobileNumber && mobileNumber.username !== username) {
+      return res
+        .status(501)
+        .json({ success: false, message: "Mobile Number already Exist" });
+    }
+    const Email = await User.findOne({ email });
+    if (Email && Email.username !== username) {
+      return res
+        .status(501)
+        .json({ success: false, message: "Email already Exist" });
+    }
+    await User.findOneAndUpdate(
+      { username },
+      { mobilenumber, email, firstname, lastname, gender, avatar }
+    );
+    return res.status(201).json({
+      message: "Successfully Updated....!!!",
+      success: true,
+    });
   } catch (err) {
     res.status(401).json({ success: false, message: err.message });
   }

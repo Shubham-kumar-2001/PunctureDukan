@@ -8,17 +8,29 @@ import HeroService from "./HeroService";
 import HeroLoaderService from "./HeroServiceLoader";
 import { useHttpClient } from "../../../Hooks/http-hook";
 import ErrorModule from "./../../../ErrorModule/ErrorModule";
+import { toast } from "react-toastify";
 const Hero = () => {
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, error, sendRequest } = useHttpClient();
   const [services, setServices] = useState([]);
+  const handleError = (err) =>
+    toast.error(err, {
+      position: "top-right",
+    });
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
           `${process.env.REACT_APP_HOME}services`
         );
-        setServices(responseData);
-      } catch (err) {}
+        const { success, message, service } = responseData;
+        if (success) {
+          setServices(service);
+        } else {
+          handleError(message);
+        }
+      } catch (err) {
+        handleError(error);
+      }
     };
     fetchUsers();
   }, [sendRequest]);
@@ -47,7 +59,6 @@ const Hero = () => {
   };
   return (
     <React.Fragment>
-      {<ErrorModule error={error} onClick={clearError} />}
       {!isLoading && services.length > 0 && (
         <div className="mainContainer bg-gray-100 shadow box-border w-[97%] m-auto">
           <div className="flex flex-col flex-wrap overflow-hidden">
@@ -75,7 +86,7 @@ const Hero = () => {
                     {services.map((service, index) => (
                       <HeroService
                         image={service.image}
-                        name={service.name}
+                        name={service.servicename}
                         price={service.price}
                         aboutServices={service.aboutServices}
                         service_id={service._id}

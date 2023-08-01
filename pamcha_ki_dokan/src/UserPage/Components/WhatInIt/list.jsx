@@ -2,11 +2,11 @@ import React from "react";
 const List = (props) => {
   return (
     <li className=" flex items-center justify-center flex-col w-[100%] h-[auto] md:mx-[7px] lg:mx-[15px] mb-6 ">
-      <div className="p-1 w-[190px] h-[100%]">
+      <div className="p-1 w-[190px] h-[100%] ">
         <img
           src={props.image}
           alt="loading"
-          className="w-[100%] h-[100%] relative
+          className="w-[100%] h-[100%] relative rounded-lg
     "
         />
       </div>

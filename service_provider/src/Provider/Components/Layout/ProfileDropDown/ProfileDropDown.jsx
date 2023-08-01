@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import style from "./ProfileDropDowm.module.css";
 import ProfileList from "./list";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import AuthContex from "../../../../Store/AuthContextProvider";
 import ButtonForm from "../../../../UI/buttonForm";
-import { profileData } from "../../../../Data";
 import { useHttpClient } from "../../../../Hooks/http-hook";
 import { toast } from "react-toastify";
-const ProfileDropDown = () => {
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+import { useState } from "react";
+import { useEffect } from "react";
+const ProfileDropDown = (props) => {
+  console.log(props);
+  const [profileData, setProfileData] = useState([]);
+  const { isLoading, error, sendRequest } = useHttpClient();
+  const { isLoading: profileLoading, sendRequest: profileSendRequest } =
+    useHttpClient();
   const authCtx = useContext(AuthContex);
   const navigate = useNavigate();
   const handleError = (err) =>
@@ -22,9 +27,7 @@ const ProfileDropDown = () => {
     });
   const handleLogout = async () => {
     try {
-      const responseData = await sendRequest(
-        "http://localhost:2020/api/puncturedukan/serviceprovider/logout"
-      );
+      const responseData = await sendRequest(`${process.env.REACT_APP_LOGOUT}`);
       const { success, message } = responseData;
       if (success) {
         handleSuccess(message);
@@ -37,6 +40,25 @@ const ProfileDropDown = () => {
       handleError(error);
     }
   };
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const responseData = await profileSendRequest(
+          `${process.env.REACT_APP_HOME}navdata`
+        );
+        const { success, message, headerNav } = responseData;
+        console.log(headerNav);
+        if (success) {
+          setProfileData(headerNav[4].list);
+        } else {
+          handleError(message);
+        }
+      } catch (err) {
+        handleError(error);
+      }
+    };
+    fetchUsers();
+  }, [profileSendRequest]);
   const userName = authCtx.user_id
     ? authCtx.user_id.slice(0, authCtx.user_id.length - 6)
     : "";
@@ -50,29 +72,33 @@ const ProfileDropDown = () => {
           type="buttton"
           className="flex flex-wrap items-center justify-center text-inherit bg-inherit mt-1"
           buttonContent={
-            <span className="flex items-center justify-center  space-x-2">
-              <span className="text-[19px] font-normal text-white">
-                {userName}
+            profileLoading ? (
+              <div className="bg-gray-200 h-3 rounded-full dark:bg-gray-700 w-20 placeholder"></div>
+            ) : (
+              <span className="flex items-center justify-center  space-x-2">
+                <span className="text-[19px] font-normal text-white">
+                  {userName}
+                </span>
+                <span
+                  className={`flex flex-wrap items-start text-white text-[20px] ${style.icon}`}
+                >
+                  <i className={`fa fa-caret-right `} aria-hidden="true" />
+                </span>
+                <span
+                  className={`flex-wrap items-start text-white text-[20px] mb-[0.5rem] hidden ${style.secIcon}`}
+                >
+                  <i className={`fa fa-sort-desc `} aria-hidden="true" />
+                </span>
               </span>
-              <span
-                className={`flex flex-wrap items-start text-white text-[20px] ${style.icon}`}
-              >
-                <i className={`fa fa-caret-right `} aria-hidden="true" />
-              </span>
-              <span
-                className={`flex-wrap items-start text-white text-[20px] mb-[0.5rem] hidden ${style.secIcon}`}
-              >
-                <i className={`fa fa-sort-desc `} aria-hidden="true" />
-              </span>
-            </span>
+            )
           }
         />
         <ul
-          className={`${style.profile_dropdown_list} absolute top-[40px] w-[220px] right-[-20px] bg-white 
+          className={`${style.profile_dropdown_list} absolute top-[40px] w-[220px] right-[-15px] bg-white 
           rounded max-h-[500px]  shadow hidden`}
         >
           {profileData.map((item, index) => (
-            <ProfileList name={item.name} fonticon={item.fabIcon} key={index} />
+            <ProfileList name={item.name} fabIcon={item.fabIcon} key={index} />
           ))}
           <li
             class={`pt-[0.5rem] pr-0 pl-[1rem] ${style.profile_dropdown_list_item}`}

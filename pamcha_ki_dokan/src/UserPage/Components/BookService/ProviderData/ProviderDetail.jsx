@@ -11,13 +11,13 @@ import Child from "./../../test/child";
 import { decryptData, encryptData } from "./../../../../utility/utility";
 import { useNavigate } from "react-router-dom";
 const ProviderDetail = () => {
-  const [providerDetail, setProviderDetail] = useState({});
+  const [providerDetail, setProviderDetail] = useState([]);
   const { sendRequest: providerSendRequest } = useHttpClient();
   const navigate = useNavigate();
-  const [providerAddress, setProviderAddress] = useState({});
+  const [providerAddress, setProviderAddress] = useState([]);
   const intervalRef = useRef(null);
   localStorage.setItem("dog", true);
-  if (!Object.keys(providerDetail).length) {
+  if (!providerDetail.length && !Object.keys(providerDetail).length) {
     const providerData = localStorage.getItem("providerServiceData");
     if (providerData) {
       const originalProviderData = decryptData(providerData);
@@ -26,8 +26,9 @@ const ProviderDetail = () => {
       }
     }
   }
-  if (!Object.keys(providerAddress).length) {
+  if (!providerAddress.length && !Object.keys(providerAddress).length) {
     const providerAddress = localStorage.getItem("providerServiceAddress");
+    // console.log(providerAddress, "address");
     if (providerAddress) {
       const originalProviderAddress = decryptData(providerAddress);
       if (originalProviderAddress) {
@@ -35,6 +36,7 @@ const ProviderDetail = () => {
       }
     }
   }
+  console.log(providerAddress, "fjdfhgjkdfg");
   const handleSuccess = (msg) =>
     toast.success(msg, {
       position: "top-right",
@@ -45,10 +47,10 @@ const ProviderDetail = () => {
         "http://localhost:2020/api/puncturedukan/auth/userorderdetail"
       );
       const { success, message, userOrderdata } = providerData;
-      //   console.log(userOrderdata, "datatadtadtadtda");
       if (success) {
         const providerEncryptedAData = encryptData(userOrderdata);
         localStorage.setItem("providerServiceData", providerEncryptedAData);
+        setProviderDetail(userOrderdata);
         const useraddr = await axios.get(
           `${process.env.REACT_APP_ADDRESS}${userOrderdata.providerlocation.coordinates[0]},${userOrderdata.providerlocation.coordinates[1]}.json?access_token=${process.env.REACT_APP_MAPBOX}`
         );
@@ -56,6 +58,7 @@ const ProviderDetail = () => {
           useraddr.data.features[0].place_name
         );
         localStorage.setItem("providerServiceAddress", providerServiceAddress);
+        setProviderAddress(useraddr.data.features[0].place_name);
         handleSuccess(message);
       }
     } catch (err) {}

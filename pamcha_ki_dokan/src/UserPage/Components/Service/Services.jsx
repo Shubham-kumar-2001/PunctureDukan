@@ -3,23 +3,34 @@ import { useHttpClient } from "../../../Hooks/http-hook";
 import ErrorModule from "../../../ErrorModule/ErrorModule";
 import HeroService from "../Hero/HeroService";
 import HeroLoaderService from "../Hero/HeroServiceLoader";
+import { toast } from "react-toastify";
 const Services = () => {
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, error, sendRequest } = useHttpClient();
   const [services, setServices] = useState([]);
+  const handleError = (err) =>
+    toast.error(err, {
+      position: "top-right",
+    });
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
           `${process.env.REACT_APP_HOME}services`
         );
-        setServices(responseData);
-      } catch (err) {}
+        const { success, message, service } = responseData;
+        if (success) {
+          setServices(service);
+        } else {
+          handleError(message);
+        }
+      } catch (err) {
+        handleError(error);
+      }
     };
     fetchUsers();
   }, [sendRequest]);
   return (
     <>
-      {<ErrorModule error={error} onClick={clearError} />}
       {!isLoading && services.length > 0 && (
         <div className="flex h-auto items-start justify-center  mt-[6rem]">
           <div class="container flex mx-auto flex-col">
@@ -32,7 +43,7 @@ const Services = () => {
                   <div className="w-[95%] md:w-[45%] lg:w-[30%] mt-[10px]  my-5 ">
                     <HeroService
                       image={service.image}
-                      name={service.name}
+                      name={service.servicename}
                       price={service.price}
                       aboutServices={service.aboutServices}
                       key={index}

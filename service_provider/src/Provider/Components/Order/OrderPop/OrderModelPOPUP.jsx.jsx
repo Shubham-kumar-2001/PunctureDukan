@@ -17,11 +17,12 @@ const OrderModelPOPUP = (props) => {
   });
 
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({});
-  const [orderData, setOrderData] = useState({});
-  const [userOrderAddress, setUserOrderAddress] = useState("");
+  const [userData, setUserData] = useState([]);
+  const [orderData, setOrderData] = useState([]);
+  const [userOrderAddress, setUserOrderAddress] = useState([]);
+  const [providerOrderAddress, setProviderOrderAddress] = useState([]);
 
-  if (!Object.keys(userData).length) {
+  if (!userData.length && !Object.keys(userData).length) {
     const userOrderData = localStorage.getItem("userData");
     if (userOrderData) {
       const originalUserData = decryptData(userOrderData);
@@ -30,7 +31,7 @@ const OrderModelPOPUP = (props) => {
       }
     }
   }
-  if (!Object.keys(orderData).length) {
+  if (!orderData.length && !Object.keys(orderData).length) {
     const providerData = localStorage.getItem("providerData");
     if (providerData) {
       const originalProviderData = decryptData(providerData);
@@ -39,7 +40,7 @@ const OrderModelPOPUP = (props) => {
       }
     }
   }
-  if (userOrderAddress.length === 0) {
+  if (!userOrderAddress.length && !Object.keys(userOrderAddress).length) {
     const userAddress = localStorage.getItem("userAddress");
     if (userAddress) {
       const originalUserAddress = decryptData(userAddress);
@@ -73,6 +74,8 @@ const OrderModelPOPUP = (props) => {
         const userEncryptedAData = encryptData(provider.userdata[0]);
         localStorage.setItem("providerData", providerEncryptedAData);
         localStorage.setItem("userData", userEncryptedAData);
+        setOrderData(provider.Geonear[0]);
+        setUserData(provider.userdata[0]);
         setOrder_id({ provider_id: responseData.provider._id });
         const data = await axios.get(
           `${process.env.REACT_APP_ADDRESS}${provider.Geonear[0].providerlocation.coordinates[0]},${provider.Geonear[0].providerlocation.coordinates[1]}.json?access_token=${process.env.REACT_APP_MAPBOX}`
@@ -81,6 +84,7 @@ const OrderModelPOPUP = (props) => {
           data.data.features[0].place_name
         );
         localStorage.setItem("providerAddress", providerEncryptedAddress);
+        setProviderOrderAddress(data.data.features[0].place_name);
         const useraddr = await axios.get(
           `${process.env.REACT_APP_ADDRESS}${provider.userdata[0].latitude},${provider.userdata[0].longitude}.json?access_token=${process.env.REACT_APP_MAPBOX}`
         );
@@ -88,6 +92,7 @@ const OrderModelPOPUP = (props) => {
           useraddr.data.features[0].place_name
         );
         localStorage.setItem("userAddress", userEncryptedAddress);
+        setUserOrderAddress(useraddr.data.features[0].place_name);
       }
     } catch (err) {}
   };
@@ -155,7 +160,12 @@ const OrderModelPOPUP = (props) => {
       const { success, message } = responseData;
       if (success) {
         setOpen(false);
-        localStorage.setItem("acceptorder", false);
+        localStorage.removeItem("userData");
+        localStorage.removeItem("providerData");
+        localStorage.removeItem("userAddress");
+        localStorage.removeItem("providerAddress");
+        localStorage.removeItem("acceptorder");
+        localStorage.removeItem("verifyotp");
         handleSuccess(message);
       }
     } catch (err) {}
@@ -172,6 +182,7 @@ const OrderModelPOPUP = (props) => {
       >
         <OrderPop
           acceptOrder={acceptOrder}
+          providerAddress={providerOrderAddress}
           image={orderData.image}
           servicename={orderData.servicename}
           address={userOrderAddress}

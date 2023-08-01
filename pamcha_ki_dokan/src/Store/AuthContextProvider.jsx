@@ -33,7 +33,6 @@ export const AuthContexProvider = (props) => {
     setToken(token);
     setCookies("userjwt", token, {
       path: "/",
-      maxAge: 86400,
     });
   };
   const logoutHandler = () => {

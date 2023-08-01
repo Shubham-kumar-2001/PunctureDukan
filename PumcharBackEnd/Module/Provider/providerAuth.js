@@ -22,7 +22,8 @@ const providerSchema = new Schema({
   },
   firstname: { type: String, required: [true, "FirstName can not be blank"] },
   lastname: { type: String, required: [true, "LastName can not be blank"] },
-  address: { type: String },
+  avatar: { type: String },
+  gender: String,
   profile: { type: String },
   created: { type: Date, default: Date.now },
 });

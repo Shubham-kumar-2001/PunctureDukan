@@ -6,17 +6,29 @@ import Review from "./Review";
 import { useHttpClient } from "../../../Hooks/http-hook";
 import ReviewLoader from "./reviewLoader";
 import ErrorModule from "../../../ErrorModule/ErrorModule";
+import { toast } from "react-toastify";
 const StraightFromTheCustomer = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [reviews, setReviews] = useState([]);
+  const handleError = (err) =>
+    toast.error(err, {
+      position: "top-right",
+    });
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
           `${process.env.REACT_APP_HOME}review`
         );
-        setReviews(responseData);
-      } catch (err) {}
+        const { success, message, revi } = responseData;
+        if (success) {
+          setReviews(revi);
+        } else {
+          handleError(message);
+        }
+      } catch (err) {
+        handleError(error);
+      }
     };
     fetchUsers();
   }, [sendRequest]);
@@ -43,7 +55,6 @@ const StraightFromTheCustomer = () => {
   };
   return (
     <>
-      {<ErrorModule error={error} onClick={clearError} />}
       {!isLoading && reviews.length > 0 && (
         <div className="mainContainer bg-gray-100 shadow box-border mt-[2rem] w-[97%] m-auto">
           <div className="flex flex-col flex-wrap overflow-hidden">

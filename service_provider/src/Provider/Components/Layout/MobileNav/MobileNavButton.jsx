@@ -9,7 +9,7 @@ const MobilenavButton = (props) => {
         onClick={props.handler}
       >
         <span className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
-          {props.fabIcon}
+          <div dangerouslySetInnerHTML={{ __html: props.fabIcon }} />
         </span>
         <span class="flex-1 ml-3 text-left whitespace-nowrap">
           {props.name === "User" ? props.username : props.name}

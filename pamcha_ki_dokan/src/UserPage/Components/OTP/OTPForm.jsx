@@ -8,6 +8,8 @@ import AuthContex from "../../../Store/AuthContextProvider";
 import ButtonForm from "../../../UI/buttonForm";
 const OTPForm = (props) => {
   const { isLoading, error, sendRequest } = useHttpClient();
+  const { isLoading: isOTPLoading, sendRequest: OTPsendRequest } =
+    useHttpClient();
   const [otp, setOtp] = useState("");
   const authCtx = useContext(AuthContex);
   const navigate = useNavigate();
@@ -55,6 +57,30 @@ const OTPForm = (props) => {
     }
     setOtp("");
   };
+  const resendOtpHandler = async () => {
+    try {
+      const data = await OTPsendRequest(
+        `${process.env.REACT_APP_USER_API}${props.otpRoute}`,
+        "POST",
+        JSON.stringify({
+          mobilenumber: props.data.mobilenumber,
+          email: props.data.email,
+        }),
+        {
+          "Content-Type": "application/json",
+        }
+      );
+      const { success, message } = data;
+      if (success) {
+        handleSuccess(message);
+      } else {
+        handleError(message);
+      }
+    } catch (error) {
+      console.log(error);
+      handleError(error.message);
+    }
+  };
   return (
     <div className="max-w-[350px] w-[100%] h-auto flex flex-wrap shadow rounded m-auto mt-9">
       <div className="flex flex-col w-[100%] items-center space-y-5">
@@ -68,7 +94,7 @@ const OTPForm = (props) => {
           <form
             onSubmit={otpSubmitHandler}
             className="flex flex-wrap items-center flex-col overflow-hidden justify-center
-        relative w-[95%] bg-white  mx-auto mb-[3rem]"
+        relative w-[95%] bg-white  mx-auto mb-[1rem]"
           >
             <OtpInput
               value={otp}
@@ -84,7 +110,7 @@ const OTPForm = (props) => {
               )}
               inputType="string"
             />
-            <div className="w-[90%] flex items-center mx-auto">
+            <div className="w-[90%] flex items-center mx-auto ">
               <ButtonForm
                 type="submit"
                 buttonContent={
@@ -124,6 +150,14 @@ const OTPForm = (props) => {
               />
             </div>
           </form>
+          <div className="w-[90%] flex ml-auto mx-auto text-blue-800 mb-[2rem]">
+            <ButtonForm
+              onClick={resendOtpHandler}
+              type="submit"
+              buttonContent={isOTPLoading ? "Sending..." : "Resend Otp"}
+              className="ml-auto border-b-[1px] border-blue-800"
+            />
+          </div>
         </div>
       </div>
     </div>

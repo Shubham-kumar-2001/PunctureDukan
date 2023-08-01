@@ -30,17 +30,13 @@ const MapBoxLocation = () => {
       } else {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            // setTimeout(() => {
             try {
-              mapRef.current.flyTo({
-                center: [position.coords.longitude, position.coords.latitude],
-              });
-            } catch (err) {
-              console.log(err.message);
-              // handleError("Updating Location");
-            }
-            // }, 200);
-
+              setTimeout(() => {
+                mapRef.current.flyTo({
+                  center: [position.coords.longitude, position.coords.latitude],
+                });
+              }, 200);
+            } catch (err) {}
             dispatch(
               mapAction.newPlace({
                 latitude: position.coords.latitude,
@@ -59,8 +55,6 @@ const MapBoxLocation = () => {
       handleError(err.message);
     }
   }, [!location.latitude && !location.longitude]);
-
-  // console.log(mapRef.current, "current");
   return (
     <>
       <Map

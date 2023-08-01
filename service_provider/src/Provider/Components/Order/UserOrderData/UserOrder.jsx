@@ -7,7 +7,7 @@ import OnAcceptLoading from "./OnAcceptLoading";
 const UserOrderData = (props) => {
   const [userData, setUserData] = useState({});
   const [orderData, setOrderData] = useState({});
-  const [userOrderAddress, setUserOrderAddress] = useState({});
+  const [userOrderAddress, setUserOrderAddress] = useState([]);
   const navigate = useNavigate();
 
   if (!Object.keys(userData).length) {
@@ -37,7 +37,7 @@ const UserOrderData = (props) => {
       }
     }
   }
-  console.log(userOrderAddress, "address");
+  // console.log(userOrderAddress, "address");
   const onArriveToUSer = () => {
     const data = {
       image: orderData.image,

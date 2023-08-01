@@ -2,10 +2,7 @@ import React from "react";
 import OnAcceptOrder from "../OnAccept/OnAccept";
 import DirectionMapBox from "./../../Map/DirectionMapBox";
 const OnAcceptProviderData = (props) => {
-  console.log(
-    props.providerDetail.providerlocation.coordinates[0],
-    props.providerDetail.providerlocation.coordinates[1]
-  );
+  console.log(props, "props");
   return (
     <div className="container ">
       <div className="flex flex-wrap mx-auto flex-col w-[99%] sm:w-[95%] sm:mx-auto md:w-[85%]">

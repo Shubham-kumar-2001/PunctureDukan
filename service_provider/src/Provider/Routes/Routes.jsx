@@ -21,8 +21,9 @@ import OrderModelPOPUP from "./../Components/Order/OrderPop/OrderModelPOPUP.jsx"
 import UserOrderData from "../Components/Order/UserOrderData/UserOrder";
 import OnArriveOTP from "../Components/Order/OTP/OnArriveOTP";
 import Order from "./../Components/Order/OrderDeatil/Order";
+import Page404 from "../Components/Page404/Page404";
 const RoutesProvider = () => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState([]);
   const updateUser = (data) => {
     setUser((prevUser) => ({ ...prevUser, ...data }));
   };
@@ -43,10 +44,10 @@ const RoutesProvider = () => {
             <Navigate replace to="/serviceprovider/puncturedukan/login" />
           ),
         },
-        // {
-        //   path: "/serviceprovider/puncturedukan",
-        //   element: <div>hello</div>,
-        // },
+        {
+          path: "/serviceprovider/about",
+          element: <div>hello</div>,
+        },
 
         {
           path: "serviceprovider/puncturedukan/contactus",
@@ -54,7 +55,7 @@ const RoutesProvider = () => {
         },
         {
           path: "*",
-          element: <div>Page not Found</div>,
+          element: <Page404 />,
         },
       ],
     },

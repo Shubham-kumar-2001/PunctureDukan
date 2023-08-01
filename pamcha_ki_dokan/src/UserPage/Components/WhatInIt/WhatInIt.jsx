@@ -3,23 +3,34 @@ import List from "./list";
 import ListLoader from "./listLoader";
 import { useHttpClient } from "../../../Hooks/http-hook";
 import ErrorModule from "../../../ErrorModule/ErrorModule";
+import { toast } from "react-toastify";
 const WhatInIt = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [whatInIt, setWhatInIt] = useState([]);
+  const handleError = (err) =>
+    toast.error(err, {
+      position: "top-right",
+    });
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
           `${process.env.REACT_APP_HOME}whatinit`
         );
-        setWhatInIt(responseData);
-      } catch (err) {}
+        const { success, message, whatinit } = responseData;
+        if (success) {
+          setWhatInIt(whatinit);
+        } else {
+          handleError(message);
+        }
+      } catch (err) {
+        handleError(error);
+      }
     };
     fetchUsers();
   }, [sendRequest]);
   return (
     <>
-      {<ErrorModule error={error} onClick={clearError} />}
       {!isLoading && whatInIt.length > 0 && (
         <div className="container card mx-auto mt-[2rem] rounded-b-[25px]">
           <div className="block h-[100%] container p-8 mx-auto"></div>

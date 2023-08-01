@@ -25,7 +25,7 @@ module.exports.RegisterMail = async (
 
     let response = {
       body: {
-        name: username,
+        name: username || "!!!!Welcome to PunctureDukan",
         intro:
           text ||
           "Welcome to Daily Tuition! We're very excited to have you on board.",
