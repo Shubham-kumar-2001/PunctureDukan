@@ -15,7 +15,6 @@ import { useSelector } from "react-redux";
 const servicePriceHasEmpty = (value) => value.trim().length >= 1;
 const shopNameValidate = (value) => value.trim().length >= 5;
 const serviceNameValidate = (value) => value.trim() !== "";
-// const imageValidate = (value) => value !== "";
 const AddService = () => {
   const [image, setImage] = useState("");
   const [imageError, setImageError] = useState(false);
@@ -23,7 +22,6 @@ const AddService = () => {
   const navigate = useNavigate();
   const { isLoading, error, sendRequest } = useHttpClient();
   const location = useSelector((state) => state.location.location);
-  // console.log(location);
   const {
     value: enteredShopNameValue,
     hasError: shopNameHasError,
@@ -92,7 +90,7 @@ const AddService = () => {
     console.log(inputValue);
     try {
       const data = await sendRequest(
-        "http://localhost:2020/api/puncturedukan/serviceprovider/addservice",
+        "https://puncturedukan.onrender.com/api/puncturedukan/serviceprovider/addservice",
         "POST",
         JSON.stringify({ ...inputValue }),
         {

@@ -12,19 +12,25 @@ const AuthContex = React.createContext({
 
 export const AuthContexProvider = (props) => {
   const [cookies, setCookies, removeCookies] = useCookies([]);
-  const [token, setToken] = useState(localStorage.getItem("providerjwt"));
+  const [token, setToken] = useState(cookies.providerjwt);
   const { sendRequest } = useHttpClient();
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         await sendRequest(
-          `https://puncturedukan.onrender.com/api/puncturedukan/serviceprovider/authenticate`
+          "https://puncturedukan.onrender.com/api/puncturedukan/serviceprovider/authenticate"
         );
       } catch (err) {
         setToken("");
         localStorage.removeItem("providerjwt");
         removeCookies("providerjwt", {
           path: "/",
+          withCredentials: true,
+          httpOnly: true,
+          maxAge: 7 * 24 * 3600 * 1000,
+          sameSite: "none",
+          secure: false,
+          expires: 1,
         });
       }
     };
@@ -36,12 +42,26 @@ export const AuthContexProvider = (props) => {
     localStorage.setItem("providerjwt", token);
     setCookies("providerjwt", token, {
       path: "/",
+      withCredentials: true,
+      httpOnly: true,
+      maxAge: 7 * 24 * 3600 * 1000,
+      sameSite: "none",
+      secure: true,
+      expires: 1,
     });
   };
   const logoutHandler = () => {
     setToken("");
     localStorage.removeItem("providerjwt");
-    removeCookies("providerjwt", { path: "/" });
+    removeCookies("providerjwt", {
+      path: "/",
+      withCredentials: true,
+      httpOnly: true,
+      maxAge: 7 * 24 * 3600 * 1000,
+      sameSite: "none",
+      secure: true,
+      expires: 1,
+    });
   };
   const contexValue = {
     token: token,

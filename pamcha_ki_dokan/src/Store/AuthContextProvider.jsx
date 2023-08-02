@@ -24,6 +24,12 @@ export const AuthContexProvider = (props) => {
         setToken("");
         removeCookies("userjwt", {
           path: "/",
+          withCredentials: true,
+          httpOnly: true,
+          maxAge: 7 * 24 * 3600 * 1000,
+          sameSite: "none",
+          secure: true,
+          expires: 1,
         });
       }
     };
@@ -34,12 +40,25 @@ export const AuthContexProvider = (props) => {
 
     setCookies("userjwt", token, {
       path: "/",
-      maxAge: 86400,
+      withCredentials: true,
+      httpOnly: true,
+      maxAge: 7 * 24 * 3600 * 1000,
+      sameSite: "none",
+      secure: true,
+      expires: 1,
     });
   };
   const logoutHandler = () => {
     setToken("");
-    removeCookies("userjwt", { path: "/" });
+    removeCookies("userjwt", {
+      path: "/",
+      withCredentials: true,
+      httpOnly: true,
+      maxAge: 7 * 24 * 3600 * 1000,
+      sameSite: "none",
+      secure: true,
+      expires: 1,
+    });
   };
   const contexValue = {
     token: token,
