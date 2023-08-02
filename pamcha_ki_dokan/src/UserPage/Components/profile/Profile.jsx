@@ -39,7 +39,7 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       const responseData = await logoutSendRequest(
-        "http://localhost:2020/api/puncturedukan/auth/logout"
+        "https://puncturedukan.onrender.com/api/puncturedukan/auth/logout"
       );
       const { success, message } = responseData;
       if (success) {
@@ -60,7 +60,7 @@ const Profile = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
-          "http://localhost:2020/api/puncturedukan/auth/user"
+          "https://puncturedukan.onrender.com/api/puncturedukan/auth/user"
         );
         const { success, message, userData } = responseData;
         if (success) {
@@ -82,7 +82,7 @@ const Profile = () => {
       const file = event.target.files[0];
       const base64 = await ConvertToBase64(file);
       const data = await avatarSendRequest(
-        "http://localhost:2020/api/puncturedukan/auth/updateuser",
+        "https://puncturedukan.onrender.com/api/puncturedukan/auth/updateuser",
         "PUT",
         JSON.stringify({ avatar: base64 }),
         {

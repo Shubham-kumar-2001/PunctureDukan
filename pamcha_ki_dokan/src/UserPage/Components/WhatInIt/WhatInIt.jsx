@@ -5,7 +5,7 @@ import { useHttpClient } from "../../../Hooks/http-hook";
 import ErrorModule from "../../../ErrorModule/ErrorModule";
 import { toast } from "react-toastify";
 const WhatInIt = () => {
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, error, sendRequest } = useHttpClient();
   const [whatInIt, setWhatInIt] = useState([]);
   const handleError = (err) =>
     toast.error(err, {
