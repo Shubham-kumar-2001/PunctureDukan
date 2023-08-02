@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { getCurrentUser } from "../Middleware/middleware";
 import { useHttpClient } from "../Hooks/http-hook";
+import axios from "axios";
 
 const AuthContex = React.createContext({
   token: "",
@@ -17,7 +18,7 @@ export const AuthContexProvider = (props) => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        await sendRequest(
+        await axios.get(
           "https://puncturedukan.onrender.com/api/puncturedukan/auth/authenticate"
         );
       } catch (err) {
