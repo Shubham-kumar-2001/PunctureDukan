@@ -64,7 +64,7 @@ app.use(bodyParser.json());
 app.use(
   cors({
     origin: [
-      precocess.env.CLIENT_URL ||
+      process.env.CLIENT_URL ||
         process.env.PROVIDER_URL ||
         "http//localhost:3000",
     ],
