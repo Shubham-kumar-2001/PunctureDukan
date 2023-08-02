@@ -52,7 +52,7 @@ const PaymentsRequest = (props) => {
       handler: async (response) => {
         try {
           const paymentsVerification = await paymentsSendRequest(
-            `${process.env.REACT_APP_PAYMENT}verifypayments`,
+            `https://puncturedukan.onrender.com/api/puncturedukan/payment/verifypayments`,
             "POST",
             JSON.stringify({
               razorpay_order_id: response.razorpay_order_id,
@@ -106,7 +106,7 @@ const PaymentsRequest = (props) => {
         return;
       }
       const fetchPaymentsRequest = await sendRequest(
-        `${process.env.REACT_APP_PAYMENT}paymentsorder`,
+        `https://puncturedukan.onrender.com/api/puncturedukan/payment/paymentsorder`,
         "POST",
         JSON.stringify({
           amount: serviceInCart.totalCartPrice,

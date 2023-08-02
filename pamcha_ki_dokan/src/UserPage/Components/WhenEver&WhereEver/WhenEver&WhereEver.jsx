@@ -16,7 +16,7 @@ const WhenEverWhereEver = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
-          `${process.env.REACT_APP_HOME}whenever&whereever`
+          `https://puncturedukan.onrender.com/api/puncturedukan/whenever&whereever`
         );
         const { success, message, whenEver } = responseData;
         if (success) {

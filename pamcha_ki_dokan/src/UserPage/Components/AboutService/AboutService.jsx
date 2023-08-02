@@ -16,7 +16,7 @@ const AboutService = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
-          `${process.env.REACT_APP_HOME}about`
+          "https://puncturedukan.onrender.com/api/puncturedukan/about"
         );
         const { success, message, about } = responseData;
         console.log(about);

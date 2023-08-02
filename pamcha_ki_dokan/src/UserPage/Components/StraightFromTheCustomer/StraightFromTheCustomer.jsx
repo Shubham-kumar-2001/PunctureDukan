@@ -18,7 +18,7 @@ const StraightFromTheCustomer = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
-          `${process.env.REACT_APP_HOME}review`
+          `https://puncturedukan.onrender.com/api/puncturedukan/review`
         );
         const { success, message, revi } = responseData;
         if (success) {

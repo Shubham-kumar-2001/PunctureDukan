@@ -41,7 +41,7 @@ const RegisterFirstStep = (props) => {
 
     try {
       const data = await sendRequest(
-        `${process.env.REACT_APP_USER_API}generateotp`,
+        "https://puncturedukan.onrender.com/api/puncturedukan/auth/generateotp",
         "POST",
         JSON.stringify({ mobilenumber: enteredPhoneNumberValue }),
         {

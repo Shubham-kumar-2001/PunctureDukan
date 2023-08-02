@@ -64,7 +64,7 @@ const OrderModelPOPUP = (props) => {
   const fetchUsers = async () => {
     try {
       const responseData = await sendRequest(
-        `${process.env.REACT_APP_ORDER}providerorderdetail`
+        `https://puncturedukan.onrender.com/api/puncturedukan/serviceorder/providerorderdetail`
       );
       const { success, provider } = responseData;
       console.log(provider.Geonear[0].username, "data");
@@ -110,7 +110,7 @@ const OrderModelPOPUP = (props) => {
   const acceptOrder = async () => {
     try {
       const responseData = await sendRequest(
-        `${process.env.REACT_APP_ORDER}acceptorder`,
+        `https://puncturedukan.onrender.com/api/puncturedukan/serviceorder/acceptorder`,
         "POST",
         JSON.stringify({
           userlatitude: userData.latitude,
@@ -147,7 +147,7 @@ const OrderModelPOPUP = (props) => {
   const rejectOrder = async () => {
     try {
       const responseData = await sendRequest(
-        `${process.env.REACT_APP_ORDER}onrejectorder`,
+        `https://puncturedukan.onrender.com/api/puncturedukan/serviceorder/onrejectorder`,
         "PUT",
         JSON.stringify({
           order_id: order_id.provider_id,

@@ -26,7 +26,7 @@ const OnArriveOTP = (props) => {
     }
     try {
       const data = await sendRequest(
-        `${process.env.REACT_APP_ORDER}onarrive`,
+        `https://puncturedukan.onrender.com/api/puncturedukan/serviceorder/onarrive`,
         "POST",
         JSON.stringify({
           otp,

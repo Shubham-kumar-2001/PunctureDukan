@@ -18,7 +18,7 @@ export const AuthContexProvider = (props) => {
     const fetchUsers = async () => {
       try {
         await sendRequest(
-          "http://localhost:2020/api/puncturedukan/serviceprovider/authenticate"
+          `https://puncturedukan.onrender.com/api/puncturedukan/serviceprovider/authenticate`
         );
       } catch (err) {
         setToken("");

@@ -17,7 +17,7 @@ const ServiceCarousel = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
-          `${process.env.REACT_APP_HOME}carousel`
+          `https://puncturedukan.onrender.com/api/puncturedukan/carousel`
         );
         const { success, message, Caro } = responseData;
         if (success) {
@@ -138,7 +138,11 @@ const ServiceCarousel = () => {
                   </dir>
                   <ButtonForm
                     type="submit"
-                    buttonContent="Book Service Now"
+                    buttonContent={
+                      <Link to={`/puncturedukan/service/${slide.servicename}`}>
+                        Book Service Now
+                      </Link>
+                    }
                     className={`text-[20px] w-[90%] sm:w-[70%] md:w-[40%] text-white bg-gray-700 hover:gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-[3rem] text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800
                        `}
                   />

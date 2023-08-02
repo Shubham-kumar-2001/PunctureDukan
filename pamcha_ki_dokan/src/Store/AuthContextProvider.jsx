@@ -11,17 +11,18 @@ const AuthContex = React.createContext({
 });
 
 export const AuthContexProvider = (props) => {
-  const [cookies, setCookies, removeCookies] = useCookies([]);
-  const [token, setToken] = useState(cookies.userjwt);
+  const [setCookies, removeCookies] = useCookies([]);
+  const [token, setToken] = useState(localStorage.getItem("userjwt"));
   const { sendRequest } = useHttpClient();
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         await sendRequest(
-          "http://localhost:2020/api/puncturedukan/auth/authenticate"
+          "https://puncturedukan.onrender.com/api/puncturedukan/auth/authenticate"
         );
       } catch (err) {
         setToken("");
+        localStorage.removeItem("userjwt");
         removeCookies("userjwt", {
           path: "/",
         });
@@ -31,12 +32,15 @@ export const AuthContexProvider = (props) => {
   }, [token]);
   const loginHandler = (token) => {
     setToken(token);
+    localStorage.setItem("userjwt", token);
     setCookies("userjwt", token, {
       path: "/",
+      maxAge: 86400,
     });
   };
   const logoutHandler = () => {
     setToken("");
+    localStorage.removeItem("userjwt");
     removeCookies("userjwt", { path: "/" });
   };
   const contexValue = {

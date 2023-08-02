@@ -30,7 +30,7 @@ const EditUserData = (props) => {
     try {
       event.preventDefault();
       const data = await sendRequest(
-        `${process.env.REACT_APP_UPDATE_USER}`,
+        `https://puncturedukan.onrender.com/api/puncturedukan/auth/updateuser`,
         "PUT",
         JSON.stringify({ ...values }),
         {

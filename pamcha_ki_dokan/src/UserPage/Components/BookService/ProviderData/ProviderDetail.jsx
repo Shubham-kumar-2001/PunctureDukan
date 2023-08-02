@@ -36,7 +36,6 @@ const ProviderDetail = () => {
       }
     }
   }
-  console.log(providerAddress, "fjdfhgjkdfg");
   const handleSuccess = (msg) =>
     toast.success(msg, {
       position: "top-right",
@@ -44,7 +43,7 @@ const ProviderDetail = () => {
   const fetchProviderDetail = async () => {
     try {
       const providerData = await providerSendRequest(
-        "http://localhost:2020/api/puncturedukan/auth/userorderdetail"
+        "https://puncturedukan.onrender.com/api/puncturedukan/auth/userorderdetail"
       );
       const { success, message, userOrderdata } = providerData;
       if (success) {

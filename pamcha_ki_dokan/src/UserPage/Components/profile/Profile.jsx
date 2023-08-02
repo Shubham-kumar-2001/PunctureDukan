@@ -59,7 +59,9 @@ const Profile = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const responseData = await sendRequest(`${process.env.REACT_APP_USER}`);
+        const responseData = await sendRequest(
+          `https://puncturedukan.onrender.com/api/puncturedukan/auth/user`
+        );
         const { success, message, userData } = responseData;
         if (success) {
           setUserData(userData);

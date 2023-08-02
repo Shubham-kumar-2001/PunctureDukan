@@ -73,7 +73,7 @@ const ContactForm = (props) => {
     };
     try {
       const data = await sendRequest(
-        `${process.env.REACT_APP_HOME}contact`,
+        `https://puncturedukan.onrender.com/api/puncturedukan/contact`,
         "POST",
         JSON.stringify({ ...contactUsData }),
         {

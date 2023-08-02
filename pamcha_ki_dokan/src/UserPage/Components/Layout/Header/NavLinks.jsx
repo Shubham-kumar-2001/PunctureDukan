@@ -19,7 +19,7 @@ const NavLinks = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
-          `${process.env.REACT_APP_HOME}navdata`
+          `https://puncturedukan.onrender.com/api/puncturedukan/navdata`
         );
         const { success, message, headerNav } = responseData;
         console.log(headerNav);

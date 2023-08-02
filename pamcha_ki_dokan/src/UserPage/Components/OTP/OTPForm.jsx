@@ -30,7 +30,7 @@ const OTPForm = (props) => {
     }
     try {
       const data = await sendRequest(
-        `${process.env.REACT_APP_USER_API}${props.routeUrl}`,
+        `https://puncturedukan.onrender.com/api/puncturedukan/auth/${props.routeUrl}`,
         "POST",
         JSON.stringify({
           code: otp,
@@ -60,7 +60,7 @@ const OTPForm = (props) => {
   const resendOtpHandler = async () => {
     try {
       const data = await OTPsendRequest(
-        `${process.env.REACT_APP_USER_API}${props.otpRoute}`,
+        `https://puncturedukan.onrender.com/api/puncturedukan/auth/${props.otpRoute}`,
         "POST",
         JSON.stringify({
           mobilenumber: props.data.mobilenumber,

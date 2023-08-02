@@ -15,7 +15,7 @@ const Services = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
-          `${process.env.REACT_APP_HOME}services`
+          `https://puncturedukan.onrender.com/api/puncturedukan/services`
         );
         const { success, message, service } = responseData;
         if (success) {

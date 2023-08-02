@@ -15,7 +15,7 @@ const WhatInIt = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
-          `${process.env.REACT_APP_HOME}whatinit`
+          `https://puncturedukan.onrender.com/api/puncturedukan/whatinit`
         );
         const { success, message, whatinit } = responseData;
         if (success) {

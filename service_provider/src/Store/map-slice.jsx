@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialLocationState = {
   location: {
-    latitude: 0,
-    longitude: 0,
+    latitude: 12,
+    longitude: 12,
   },
   mapRendering: false,
   errorMessage: false,

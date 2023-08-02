@@ -9,8 +9,8 @@ export const useHttpClient = () => {
       url,
       method = "GET",
       body = null,
-      headers = {},
-      credentials = "include"
+      headers = {}
+      // credentials = "include"
     ) => {
       setIsLoading(true);
       const httpAbortCtrl = new AbortController();
@@ -21,7 +21,7 @@ export const useHttpClient = () => {
           method,
           body,
           headers,
-          credentials,
+          // credentials,
           signal: httpAbortCtrl.signal,
         });
 

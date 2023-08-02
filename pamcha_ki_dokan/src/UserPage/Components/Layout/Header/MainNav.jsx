@@ -29,7 +29,7 @@ const MainNavigation = (props) => {
     setDrawerIsOpen(true);
     try {
       const responseData = await sendRequest(
-        `${process.env.REACT_APP_HOME}navdata`
+        `https://puncturedukan.onrender.com/api/puncturedukan/navdata`
       );
       const { success, message, headerNav } = responseData;
       if (success) {

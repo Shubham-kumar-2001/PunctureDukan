@@ -31,11 +31,9 @@ const MapBoxLocation = () => {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             try {
-              setTimeout(() => {
-                mapRef.current.flyTo({
-                  center: [position.coords.longitude, position.coords.latitude],
-                });
-              }, 200);
+              mapRef.current.flyTo({
+                center: [position.coords.longitude, position.coords.latitude],
+              });
             } catch (err) {}
             dispatch(
               mapAction.newPlace({
@@ -55,6 +53,8 @@ const MapBoxLocation = () => {
       handleError(err.message);
     }
   }, [!location.latitude && !location.longitude]);
+
+  // console.log(mapRef.current, "current");
   return (
     <>
       <Map

@@ -72,7 +72,7 @@ const LoginForm = () => {
     if (enteredPasswordIsValid) {
       try {
         const data = await passwordSendRequest(
-          `${process.env.REACT_APP_USER_API}login`,
+          "https://puncturedukan.onrender.com/api/puncturedukan/auth/login",
           "POST",
           JSON.stringify({ ...inputValue }),
           {
@@ -95,7 +95,7 @@ const LoginForm = () => {
     } else {
       try {
         const data = await OTPsendRequest(
-          `${process.env.REACT_APP_USER_API}generateloginotp`,
+          "https://puncturedukan.onrender.com/api/puncturedukan/auth/generateloginotp",
           "POST",
           JSON.stringify({ ...inputValue }),
           {
