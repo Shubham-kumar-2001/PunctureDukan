@@ -11,8 +11,8 @@ const AuthContex = React.createContext({
 });
 
 export const AuthContexProvider = (props) => {
-  const [setCookies, removeCookies] = useCookies([]);
-  const [token, setToken] = useState(localStorage.getItem("userjwt"));
+  const [cookies, setCookies, removeCookies] = useCookies([]);
+  const [token, setToken] = useState(cookies.userjwt);
   const { sendRequest } = useHttpClient();
   useEffect(() => {
     const fetchUsers = async () => {
@@ -23,25 +23,23 @@ export const AuthContexProvider = (props) => {
       } catch (err) {
         setToken("");
         localStorage.removeItem("userjwt");
-        removeCookies("userjwt", {
-          path: "/",
-        });
+        removeCookies("userjwt");
       }
     };
-    fetchUsers();
+    setTimeout(() => {
+      fetchUsers();
+    }, 4000);
   }, [token]);
   const loginHandler = (token) => {
     setToken(token);
     localStorage.setItem("userjwt", token);
-    setCookies("userjwt", token, {
-      path: "/",
-      maxAge: 86400,
-    });
+    setCookies("userjwt", token);
+    console.log(token);
   };
   const logoutHandler = () => {
     setToken("");
     localStorage.removeItem("userjwt");
-    removeCookies("userjwt", { path: "/" });
+    removeCookies("userjwt");
   };
   const contexValue = {
     token: token,

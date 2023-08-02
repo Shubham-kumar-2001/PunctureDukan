@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 module.exports = async (req, res, next) => {
   try {
     const token = req.cookies.userjwt;
-
+    console.log(req.cookies.userjwt);
     if (!token) {
       return res(401).json({ success: false, message: "Invalid User" });
     }
@@ -10,6 +10,7 @@ module.exports = async (req, res, next) => {
     req.user = decodeToken;
     next();
   } catch (err) {
+    console.log(err.message);
     res.status(401).json({
       success: false,
       message: err.message,
