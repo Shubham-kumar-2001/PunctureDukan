@@ -43,7 +43,7 @@ const ProviderDetail = () => {
   const fetchProviderDetail = async () => {
     try {
       const providerData = await providerSendRequest(
-        "https://puncturedukan.onrender.com/api/puncturedukan/auth/userorderdetail"
+        "http://localhost:2020/api/puncturedukan/auth/userorderdetail"
       );
       const { success, message, userOrderdata } = providerData;
       if (success) {

@@ -38,7 +38,7 @@ const BookService = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await serviceSendRequest(
-          `https://puncturedukan.onrender.com/api/puncturedukan/service/${service_id}`
+          `http://localhost:2020/api/puncturedukan/service/${service_id}`
         );
         const { success, message, service } = responseData;
         if (success) {
@@ -67,7 +67,7 @@ const BookService = () => {
     event.preventDefault();
     try {
       const responseData = await coordinateSendRequest(
-        `https://puncturedukan.onrender.com/api/puncturedukan/serviceorder/orderdetail`,
+        `http://localhost:2020/api/puncturedukan/serviceorder/orderdetail`,
         "POST",
         JSON.stringify({
           servicename: data.name,

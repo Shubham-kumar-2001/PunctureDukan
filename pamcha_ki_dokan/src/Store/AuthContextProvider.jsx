@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { getCurrentUser } from "../Middleware/middleware";
 import { useHttpClient } from "../Hooks/http-hook";
-import axios from "axios";
 
 const AuthContex = React.createContext({
   token: "",
@@ -18,29 +17,29 @@ export const AuthContexProvider = (props) => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        await axios.get(
-          "https://puncturedukan.onrender.com/api/puncturedukan/auth/authenticate"
+        await sendRequest(
+          "http://localhost:2020/api/puncturedukan/auth/authenticate"
         );
       } catch (err) {
         setToken("");
-        localStorage.removeItem("userjwt");
-        removeCookies("userjwt");
+        removeCookies("userjwt", {
+          path: "/",
+        });
       }
     };
-    setTimeout(() => {
-      fetchUsers();
-    }, 4000);
+    fetchUsers();
   }, [token]);
   const loginHandler = (token) => {
     setToken(token);
-    localStorage.setItem("userjwt", token);
-    setCookies("userjwt", token);
-    console.log(token);
+
+    setCookies("userjwt", token, {
+      path: "/",
+      maxAge: 86400,
+    });
   };
   const logoutHandler = () => {
     setToken("");
-    localStorage.removeItem("userjwt");
-    removeCookies("userjwt");
+    removeCookies("userjwt", { path: "/" });
   };
   const contexValue = {
     token: token,

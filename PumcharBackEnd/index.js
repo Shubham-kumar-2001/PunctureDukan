@@ -35,18 +35,9 @@ connectMongo()
 app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET",
-    "POST",
-    "OPTIONS",
-    "PUT",
-    "PATCH",
-    "DELETE"
-  );
-  res.setHeader(
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
@@ -72,8 +63,9 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(
   cors({
+    origin: ["http//localhost:3000"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
-    origin: [process.env.CLIENT_URL, "http://localhost:3000"],
   })
 );
 app.use(morgan("tiny"));

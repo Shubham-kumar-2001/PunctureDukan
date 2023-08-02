@@ -41,7 +41,7 @@ const RegisterSecondStep = (props) => {
 
     try {
       const data = await sendRequest(
-        "https://puncturedukan.onrender.com/api/puncturedukan/auth/generateotp",
+        `${process.env.REACT_APP_USER_API}generateotp`,
         "POST",
         JSON.stringify({ email: enteredEmailValue }),
         {

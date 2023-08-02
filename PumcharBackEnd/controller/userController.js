@@ -93,7 +93,7 @@ module.exports.Login = async (req, res) => {
       const token = createSecretToken(user.username);
       res.cookie("userjwt", token, {
         withCredentials: true,
-        httpOnly: true,
+        httpOnly: false,
         secure: true,
         maxAge: 7 * 24 * 3600 * 1000,
       });

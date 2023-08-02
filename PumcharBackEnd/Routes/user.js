@@ -26,13 +26,8 @@ router.route("/verifyotp").post(verifyOTP);
 router.route("/userorderdetail").get(Authmiddleware, fetchUserOrderDetail);
 router.route("/user").get(Authmiddleware, getUserData);
 router.route("/logout").get(Authmiddleware, logout);
-router.route("/authenticate").get(Authmiddleware, (req, res, next) => {
-  try {
-    res.status(201).json({ success: true });
-    next();
-  } catch (err) {
-    next(err);
-  }
+router.route("/authenticate").get(Authmiddleware, (req, res) => {
+  res.status(201).json({ success: true });
 });
 // put methos
 router.route("/updateuser").put(Authmiddleware, updateUser);
