@@ -5,10 +5,6 @@ const UserOTPVerification = require("../Module/userModule/userOTPVerification");
 const User = require("../Module/userModule/user");
 const { RegisterMail } = require("../GenratorOTP/OTPMailer");
 const { sendMessage } = require("../GenratorOTP/mobileOTP");
-// const client = require("twilio")(
-//   process.env.TWILIO_ACCOUNT_SID,
-//   process.env.TWILIO_AUTH_TOKEN
-// );
 module.exports.Register = async (req, res) => {
   try {
     const { email, password, mobilenumber, firstname, lastname } = req.body;
@@ -44,8 +40,10 @@ module.exports.Register = async (req, res) => {
     res.cookie("userjwt", token, {
       withCredentials: true,
       httpOnly: true,
-      secure: true,
       maxAge: 7 * 24 * 3600 * 1000,
+      sameSite: "none",
+      secure: true,
+      expires: 1,
     });
     // req.session.usename = user.username;
     res.status(201).json({
@@ -93,9 +91,11 @@ module.exports.Login = async (req, res) => {
       const token = createSecretToken(user.username);
       res.cookie("userjwt", token, {
         withCredentials: true,
-        httpOnly: false,
-        secure: true,
+        httpOnly: true,
         maxAge: 7 * 24 * 3600 * 1000,
+        sameSite: "none",
+        secure: true,
+        expires: 1,
       });
       res.status(201).json({
         message: "User logged in successfully",
@@ -237,8 +237,10 @@ module.exports.verifyLoginOTP = async (req, res) => {
       res.cookie("userjwt", token, {
         withCredentials: true,
         httpOnly: true,
-        secure: true,
         maxAge: 7 * 24 * 3600 * 1000,
+        sameSite: "none",
+        secure: true,
+        expires: 1,
       });
       res.status(201).json({
         message: "User logged in successfully",
