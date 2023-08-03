@@ -70,7 +70,7 @@ const BookService = () => {
         `https://puncturedukan.onrender.com/api/puncturedukan/serviceorder/orderdetail`,
         "POST",
         JSON.stringify({
-          servicename: data.name,
+          servicename: data.servicename,
           longitude: location.latitude,
           latitude: location.longitude,
         }),

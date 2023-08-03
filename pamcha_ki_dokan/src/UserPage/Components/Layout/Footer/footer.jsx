@@ -34,7 +34,7 @@ const Footer = () => {
     <>
       {isLoading && <FooterLoader />}
       {!isLoading && (
-        <div className="footerLayout container bg-gray-50  mx-auto ">
+        <div className="footerLayout container bg-gray-50  mx-auto sticky-bottom !mt-auto bottom-0 left-0">
           <div className="flex container mx-auto my-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className=" flex flex-col flex-wrap my-4 ">

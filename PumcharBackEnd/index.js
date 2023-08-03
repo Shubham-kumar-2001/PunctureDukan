@@ -89,5 +89,5 @@ app.use((err, req, res, next) => {
 });
 app.listen(Port, () => {
   console.log(`Listening on port ${Port}`);
-  console.log(process.env.SPRINGEDGE);
+  // console.log(process.env.SPRINGEDGE);
 });

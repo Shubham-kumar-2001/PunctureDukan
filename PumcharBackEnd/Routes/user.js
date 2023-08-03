@@ -12,7 +12,11 @@ const {
   logout,
 } = require("../controller/userController");
 const Authmiddleware = require("../Middleware/Authmiddleware");
-const { fetchUserOrderDetail } = require("../controller/OrderController");
+const {
+  fetchUserOrderDetail,
+  acceptOrder,
+  OrderService,
+} = require("../controller/OrderController");
 const router = express.Router();
 
 router.route("/register").post(Register);
@@ -29,6 +33,7 @@ router.route("/logout").get(Authmiddleware, logout);
 router.route("/authenticate").get(Authmiddleware, (req, res) => {
   res.status(201).json({ success: true });
 });
+router.route("/orderservice").get(Authmiddleware, OrderService);
 // put methos
 router.route("/updateuser").put(Authmiddleware, updateUser);
 router.route("/resetpassword").put(Authmiddleware, resetPassword);

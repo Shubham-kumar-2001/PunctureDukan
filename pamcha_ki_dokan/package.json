@@ -25,6 +25,7 @@
     "env-cmd": "^10.1.0",
     "express-session": "^1.17.3",
     "fast-two-sms": "^3.0.0",
+    "flowbite-react": "^0.5.0",
     "font-awesome": "^4.7.0",
     "fontawesome": "4.7",
     "google-map-react": "^2.2.1",

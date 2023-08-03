@@ -14,6 +14,7 @@ const {
   serviceProvidedByProvider,
 } = require("../controller/providerController");
 const ProviderAuthMiddleWare = require("../Middleware/ProviderAuthMiddleWare");
+const { ServiceProvided } = require("../controller/OrderController");
 // const { fetchProviderOrderDetail } = require("../controller/OrderController");
 // const { RegisterMail } = require("../GenratorOTP/OTPMailer");
 // const { sendMessage } = require("../GenratorOTP/mobileOTP");
@@ -36,6 +37,7 @@ router.route("/logout").get(ProviderAuthMiddleWare, logout);
 router.route("/authenticate").get(ProviderAuthMiddleWare, (req, res) => {
   res.status(201).json({ success: true });
 });
+router.route("/serviceprovided").get(Authmiddleware, ServiceProvided);
 // put methos
 router.route("/updateuser").put(ProviderAuthMiddleWare, updateUser);
 

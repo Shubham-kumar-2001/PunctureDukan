@@ -13,6 +13,7 @@ const AuthContex = React.createContext({
 export const AuthContexProvider = (props) => {
   const [cookies, setCookies, removeCookies] = useCookies([]);
   const [token, setToken] = useState(cookies.userjwt);
+  console.log(token, "token", cookies.userjwt);
   const { sendRequest } = useHttpClient();
   useEffect(() => {
     const fetchUsers = async () => {
@@ -24,12 +25,7 @@ export const AuthContexProvider = (props) => {
         setToken("");
         removeCookies("userjwt", {
           path: "/",
-          withCredentials: true,
-          httpOnly: true,
-          maxAge: 7 * 24 * 3600 * 1000,
-          sameSite: "none",
-          secure: true,
-          expires: 1,
+          Domain: "puncturedukan-a16w.onrender.com",
         });
       }
     };
@@ -37,27 +33,18 @@ export const AuthContexProvider = (props) => {
   }, [token]);
   const loginHandler = (token) => {
     setToken(token);
-
     setCookies("userjwt", token, {
       path: "/",
-      withCredentials: true,
-      httpOnly: true,
       maxAge: 7 * 24 * 3600 * 1000,
-      sameSite: "none",
-      secure: true,
-      expires: 1,
+      Domain: "puncturedukan-a16w.onrender.com",
     });
   };
   const logoutHandler = () => {
     setToken("");
     removeCookies("userjwt", {
       path: "/",
-      withCredentials: true,
-      httpOnly: true,
-      maxAge: 7 * 24 * 3600 * 1000,
-      sameSite: "none",
-      secure: true,
-      expires: 1,
+
+      Domain: "puncturedukan-a16w.onrender.com",
     });
   };
   const contexValue = {

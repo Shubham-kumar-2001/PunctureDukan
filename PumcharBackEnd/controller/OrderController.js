@@ -108,7 +108,6 @@ module.exports.acceptOrder = async (req, res) => {
       shopname,
       order_id,
     } = req.body;
-    console.log(req.body);
     const { username } = req.provider;
     const provider = await ProviderAuth.findOne({ username });
     if (!provider) {
@@ -197,6 +196,32 @@ module.exports.fetchUserOrderDetail = async (req, res) => {
   } catch (err) {
     // console.log(err.message);
     res.status(501).json({ success: false, message: err.message });
+  }
+};
+module.exports.OrderService = async (req, res) => {
+  try {
+    const { username } = req.user;
+    const orderservice = await OrderService.find({ username });
+    if (!orderservice) {
+      res.json({ success: false, message: "You haven't palce any order" });
+    }
+    res.status(201).json({ success: true, orderservice });
+  } catch (err) {
+    console.log(err.message);
+    res.json({ success: false, message: err.message });
+  }
+};
+module.exports.ServiceProvided = async (req, res) => {
+  try {
+    const { username } = req.provider;
+    const orderservice = await OrderService.find({ username });
+    if (!orderservice) {
+      res.json({ success: false, message: "You haven't served any services" });
+    }
+    res.status(201).json({ success: true, orderservice });
+  } catch (err) {
+    console.log(err.message);
+    res.json({ success: false, message: err.message });
   }
 };
 // module.exports.fetchProviderOrderDetail = async (req, res) => {
