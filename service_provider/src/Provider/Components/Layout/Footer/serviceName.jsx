@@ -4,10 +4,7 @@ import { NavLink } from "react-router-dom";
 const ServiceName = (props) => {
   return (
     <li className="p-0 list-none relative mb-1">
-      <NavLink
-        activeClassName="text-#758bc5"
-        to={`/cyberclub/${props.name.toLowerCase()}`}
-      >
+      <NavLink activeClassName="text-#758bc5" to="/puncturedukan/services">
         <span
           className="before:content-[' '] before:absolute before:top-0 before:left-0 w-[100%] 
         h-[100%] flex-col flex-wrap items-start  justify-center relative"

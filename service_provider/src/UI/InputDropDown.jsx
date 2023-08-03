@@ -1,5 +1,4 @@
 import React from "react";
-import { services } from "../Data";
 const InputDropDown = (props) => {
   return (
     <div className="w-[95%] mx-auto overflow-hidden">
@@ -18,9 +17,13 @@ const InputDropDown = (props) => {
         <option selected value=" ">
           Choose a Service
         </option>
-        {services.map((service, index) => (
-          <option value={`${service.name}`}>{service.name}</option>
-        ))}
+
+        <option value="Puncture Repair">Puncture Repair</option>
+        <option value="Battery Jumpstart">Battery Jumpstart</option>
+        <option value="Towing Service">Towing Service</option>
+        <option value="On Spot Minor Repair">On Spot Minor Repair</option>
+        <option value="Emergency Fuel">Emergency Fuel</option>
+        <option value="KeyLock Assist">KeyLock Assist</option>
       </select>
     </div>
   );

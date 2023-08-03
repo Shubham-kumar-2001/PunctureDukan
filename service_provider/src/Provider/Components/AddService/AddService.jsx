@@ -87,7 +87,6 @@ const AddService = () => {
       latitude: location.longitude,
       longitude: location.latitude,
     };
-    console.log(inputValue);
     try {
       const data = await sendRequest(
         "https://puncturedukan.onrender.com/api/puncturedukan/serviceprovider/addservice",
