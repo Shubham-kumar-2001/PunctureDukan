@@ -27,7 +27,9 @@ const ProfileDropDown = (props) => {
     });
   const handleLogout = async () => {
     try {
-      const responseData = await sendRequest(`${process.env.REACT_APP_LOGOUT}`);
+      const responseData = await sendRequest(
+        `https://puncturedukan.onrender.com/api/puncturedukan/serviceprovider/logout`
+      );
       const { success, message } = responseData;
       if (success) {
         handleSuccess(message);

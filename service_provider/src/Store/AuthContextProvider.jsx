@@ -42,12 +42,6 @@ export const AuthContexProvider = (props) => {
     localStorage.setItem("providerjwt", token);
     setCookies("providerjwt", token, {
       path: "/",
-      withCredentials: true,
-      httpOnly: true,
-      maxAge: 7 * 24 * 3600 * 1000,
-      sameSite: "none",
-      secure: true,
-      expires: 1,
     });
   };
   const logoutHandler = () => {
