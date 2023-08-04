@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const ServiceSchema = new Schema({
-  name: String,
+  servicename: String,
   price: Number,
   aboutServices: String,
+  image: String,
 });
 
 const Service = mongoose.model("Service", ServiceSchema);
