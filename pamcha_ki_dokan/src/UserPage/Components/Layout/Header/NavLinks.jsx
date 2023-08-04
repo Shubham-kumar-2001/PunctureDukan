@@ -5,6 +5,7 @@ import AuthContex from "../../../../Store/AuthContextProvider";
 import { toast } from "react-toastify";
 import { useHttpClient } from "../../../../Hooks/http-hook";
 import HeaderNavLinksLoader from "./HeaderNavLinkLoader";
+import { NavLink } from "react-router-dom";
 const NavLinks = () => {
   const authCtx = useContext(AuthContex);
   const [authorized, setAuthorized] = useState([]);
@@ -48,7 +49,7 @@ const NavLinks = () => {
         }`}
       >
         {isLoading &&
-          Array.from({ length: 4 }, (_, i) => <HeaderNavLinksLoader />)}
+          Array.from({ length: 4 }, (_, i) => <HeaderNavLinksLoader key={i} />)}
         {!isLoading &&
           authCtx.user_id &&
           authorized.map((auth, index) =>
@@ -63,6 +64,19 @@ const NavLinks = () => {
           notAuthorized.map((auth, index) => (
             <HeaderNavLinks name={auth.name} key={index} />
           ))}
+        <li className="p-0 list-none relative mt-0 mr-[1rem] mb-0 ml-0">
+          <NavLink
+            activeClassName="text-#758bc5"
+            to={`${process.env.REACT_APP_PROVIDER}`}
+          >
+            <span className="before:content-[' '] before:absolute before:top-0 before:left-0 w-[100%] h-[100%] flex flex-col flex-wrap items-start p-[1rem] justify-center relative">
+              <span className="font-medium text-[1.3rem] text-white">
+                Become Provider
+              </span>
+              <span className="block text-inherit opacity-5 m-0"></span>
+            </span>
+          </NavLink>
+        </li>
       </ul>
     </nav>
   );
