@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 const NothingOnOrder = () => {
   return (
-    <section class="bg-white dark:bg-gray-900">
+    <section class="bg-white ">
       <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div class="mx-auto max-w-screen-sm text-center">
           <h1 class="mb-4 text-2xl tracking-tight font-extrabold lg:text-3xl text-blue-600 dark:text-blue-500">

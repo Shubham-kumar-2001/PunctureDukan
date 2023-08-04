@@ -22,10 +22,11 @@ const NavLinks = () => {
           `https://puncturedukan.onrender.com/api/puncturedukan/navdata`
         );
         const { success, message, headerNav } = responseData;
+        console.log(responseData, "datata");
         console.log(headerNav);
         if (success) {
-          setAuthorized(headerNav[2].list);
-          setNotAuthorized(headerNav[3].list);
+          setAuthorized(headerNav[1].list);
+          setNotAuthorized(headerNav[4].list);
         } else {
           handleError(message);
         }

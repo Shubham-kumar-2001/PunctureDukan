@@ -202,28 +202,10 @@ module.exports.fetchUserOrderDetail = async (req, res) => {
 module.exports.OrderService = async (req, res) => {
   try {
     const { username } = req.user;
-    const order = await OrderService.find({ userusername: username });
+    const orderservice = await OrderService.find({ userusername: username });
     if (!orderservice) {
       res.json({ success: false, message: "You haven't palce any order" });
     }
-    const {
-      providerfirstname,
-      providerlastname,
-      price,
-      image,
-      location,
-      status,
-      servicename,
-    } = order;
-    const orderservice = {
-      providerfirstname,
-      providerlastname,
-      price,
-      image,
-      location,
-      status,
-      servicename,
-    };
     res.status(201).json({ success: true, orderservice });
   } catch (err) {
     console.log(err.message);
@@ -295,7 +277,6 @@ module.exports.onArrive = async (req, res) => {
     if (!orderData) {
       return res.status(501).json({ success: false, message: "Invalid Order" });
     }
-    console.log(orderData);
     console.log(await bcrypt.hash(otp, 12));
     const validate = await bcrypt.compare(otp, orderData.otp);
     if (!validate) {

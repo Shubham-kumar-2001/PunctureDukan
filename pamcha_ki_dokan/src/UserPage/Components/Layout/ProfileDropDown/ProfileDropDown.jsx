@@ -9,9 +9,7 @@ import { useHttpClient } from "../../../../Hooks/http-hook";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { useEffect } from "react";
-import ProfileListLoader from "./listLoader";
 const ProfileDropDown = (props) => {
-  console.log(props);
   const [profileData, setProfileData] = useState([]);
   const { isLoading, error, sendRequest } = useHttpClient();
   const { isLoading: profileLoading, sendRequest: profileSendRequest } =
@@ -52,7 +50,7 @@ const ProfileDropDown = (props) => {
         const { success, message, headerNav } = responseData;
         console.log(headerNav);
         if (success) {
-          setProfileData(headerNav[4].list);
+          setProfileData(headerNav[2].list);
         } else {
           handleError(message);
         }

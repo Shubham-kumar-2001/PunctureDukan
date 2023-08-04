@@ -20,8 +20,8 @@ const RadioInput = (props) => {
       />
       <label
         htmlFor={props.label.toLowerCase()}
-        class={`ml-4 text-[22px] font-medium text-gray-900 dark:text-gray-300 ${
-          props.checked ? "text-zinc-600" : " "
+        class={`ml-4 text-[22px] font-medium text-gray-900 dark:text-gray-500 ${
+          props.checked ? "text-zinc-800" : " "
         }`}
       >
         {props.label}

@@ -53,7 +53,7 @@ const ListOrderLoader = (props) => {
       )}
       {width < 500 && (
         <li className=" container animate-pulse">
-          <Card classname="flex flex-wrap w-[99%] mx-auto flex-col animate-pulse">
+          <Card className="flex flex-wrap w-[99%] mx-auto flex-col animate-pulse">
             <div className="border-b-solid border-b-[.2px] font-thin  border-zinc-600 flex flex-wrap mt-4">
               <div className="flex flex-wrap space-x-2 items-center ml-[5px]">
                 <div className="text-[15px] font-[500] animate-pulse">

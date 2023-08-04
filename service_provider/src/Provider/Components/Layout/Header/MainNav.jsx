@@ -34,9 +34,9 @@ const MainNavigation = (props) => {
       const { success, message, headerNav } = responseData;
       if (success) {
         setCredentialMobilenav(headerNav[5]);
-        setUserMobileNav(headerNav[1]);
-        setAuthorized(headerNav[2]);
-        setNotAuthorized(headerNav[3]);
+        setUserMobileNav(headerNav[0]);
+        setAuthorized(headerNav[1]);
+        setNotAuthorized(headerNav[4]);
       } else {
         handleError(message);
       }
