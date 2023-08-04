@@ -27,17 +27,17 @@ const ProfileDropDown = (props) => {
   const handleLogout = async () => {
     try {
       const responseData = await sendRequest(
-        `https://punctureukanbackend.onrender.com//api/puncturedukan/auth/logout`
+        "https://puncturedukan.onrender.com/api/puncturedukan/auth/logout"
       );
       const { success, message } = responseData;
       if (success) {
         handleSuccess(message);
-        navigate("/", { replace: true });
         authCtx.logout();
+        navigate("/", { replace: true });
       } else {
         handleError(message);
       }
-    } catch (err) {
+    } catch (er) {
       handleError(error);
     }
   };

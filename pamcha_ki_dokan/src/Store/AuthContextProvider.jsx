@@ -25,7 +25,6 @@ export const AuthContexProvider = (props) => {
         setToken("");
         removeCookies("userjwt", {
           path: "/",
-          Domain: "puncturedukan-a16w.onrender.com",
         });
       }
     };
@@ -35,15 +34,12 @@ export const AuthContexProvider = (props) => {
     setToken(token);
     setCookies("userjwt", token, {
       path: "/",
-      maxAge: 7 * 24 * 3600 * 1000,
-      Domain: "puncturedukan-a16w.onrender.com",
     });
   };
   const logoutHandler = () => {
     setToken("");
     removeCookies("userjwt", {
       path: "/",
-      domain: "puncturedukan-a16w.onrender.com",
     });
   };
   const contexValue = {

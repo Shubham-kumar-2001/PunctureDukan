@@ -25,12 +25,7 @@ export const AuthContexProvider = (props) => {
         localStorage.removeItem("providerjwt");
         removeCookies("providerjwt", {
           path: "/",
-          withCredentials: true,
-          httpOnly: true,
-          maxAge: 7 * 24 * 3600 * 1000,
-          sameSite: "none",
-          secure: false,
-          expires: 1,
+         
         });
       }
     };
@@ -49,12 +44,7 @@ export const AuthContexProvider = (props) => {
     localStorage.removeItem("providerjwt");
     removeCookies("providerjwt", {
       path: "/",
-      withCredentials: true,
-      httpOnly: true,
-      maxAge: 7 * 24 * 3600 * 1000,
-      sameSite: "none",
-      secure: true,
-      expires: 1,
+      
     });
   };
   const contexValue = {

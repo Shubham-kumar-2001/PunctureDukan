@@ -379,10 +379,6 @@ module.exports.logout = async (req, res) => {
     }
     await res.clearCookie("userjwt", {
       path: "/",
-      secure: false,
-      httpOnly: false,
-      domain: "puncturedukan.onrender.com",
-      sameSite: true,
     });
     res.status(201).json({ success: true, message: "Logout Successfully" });
   } catch (err) {
