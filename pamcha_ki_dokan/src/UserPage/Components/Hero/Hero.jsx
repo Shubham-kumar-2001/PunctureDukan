@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import HeroService from "./HeroService";
 import HeroLoaderService from "./HeroServiceLoader";
 import { useHttpClient } from "../../../Hooks/http-hook";
-import ErrorModule from "./../../../ErrorModule/ErrorModule";
 import { toast } from "react-toastify";
 const Hero = () => {
   const { isLoading, error, sendRequest } = useHttpClient();

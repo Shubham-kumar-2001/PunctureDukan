@@ -3,8 +3,8 @@ const ProviderOTPVerification = require("../Module/Provider/providerOTPVerificat
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcryptjs");
 const { createProviderSecretToken } = require("../utility/providerJWT");
-const Services = require("../Module/Home/services");
 const ProviderService = require("../Module/Provider/providerService");
+const Service = require("../Module/Home/service");
 // const client = require("twilio")(
 //   process.env.TWILIO_ACCOUNT_SID,
 //   process.env.TWILIO_AUTH_TOKEN
@@ -459,7 +459,7 @@ module.exports.serviceProvidedByProvider = async (req, res) => {
         .status(501)
         .json({ success: false, message: "Couldn't find the User" });
     }
-    const service = await Services.findOne({ name: servicename });
+    const service = await Service.findOne({ name: servicename });
     if (!service) {
       return res.status(501).json({
         success: false,

@@ -13,7 +13,6 @@ const {
 } = require("../controller/HomeController");
 const Authmiddleware = require("../Middleware/Authmiddleware");
 router.route("/contact").post(Contactus);
-router.route("/carousel").get(CarouselPage);
 router.route("/services").get(ServicePages);
 router.route("/review").get(Review);
 router.route("/about").get(About);

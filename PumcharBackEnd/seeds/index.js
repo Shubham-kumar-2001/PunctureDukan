@@ -3,11 +3,11 @@ if (process.env.NODE_ENV !== "production") {
 }
 const mongoose = require("mongoose");
 const Review = require("../Module/Home/review");
-const Services = require("../Module/Home/services");
 const WhatInIt = require("../Module/Home/whatInIt");
 const WhenEver = require("../Module/Home/whenEver");
 const About = require("../Module/Home/About");
-const ServiceNav = require("../Module/Home/ServiceHeader");
+const UserNav = require("../Module/Home/User");
+const Service = require("../Module/Home/service");
 
 const connectMongo = async () => {
   await mongoose.connect(`${process.env.ATLUS_URI}`, {
@@ -309,14 +309,14 @@ const serviceMobileNav = [
 ];
 const seedDB = async () => {
   await Review.deleteMany({});
-  await ServiceNav.deleteMany({});
+  await UserNav.deleteMany({});
   await About.deleteMany({});
-  await Services.deleteMany({});
+  await Service.deleteMany({});
   await WhatInIt.deleteMany({});
   await WhenEver.deleteMany({});
-  await Services.insertMany(service);
+  await Service.insertMany(service);
   await About.insertMany(AboutService);
-  await ServiceNav.insertMany(serviceMobileNav);
+  await UserNav.insertMany(serviceMobileNav);
   await Review.insertMany(rev);
   await WhatInIt.insertMany(whatinIt);
   await WhenEver.insertMany(WhenEverData);

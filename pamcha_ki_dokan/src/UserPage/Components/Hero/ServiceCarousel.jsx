@@ -17,11 +17,11 @@ const ServiceCarousel = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
-          `https://puncturedukan.onrender.com/api/puncturedukan/carousel`
+          `https://puncturedukan.onrender.com/api/puncturedukan/services`
         );
-        const { success, message, Caro } = responseData;
+        const { success, message,service  } = responseData;
         if (success) {
-          setSlides(Caro);
+          setSlides(service);
         } else {
           handleError(message);
         }

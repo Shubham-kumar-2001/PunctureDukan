@@ -25,8 +25,8 @@ const NavLinks = () => {
         console.log(responseData, "datata");
         console.log(headerNav);
         if (success) {
-          setAuthorized(headerNav[1].list);
-          setNotAuthorized(headerNav[4].list);
+          setAuthorized(headerNav[2].list);
+          setNotAuthorized(headerNav[3].list);
         } else {
           handleError(message);
         }

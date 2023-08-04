@@ -1,23 +1,16 @@
-const Services = require("../Module/Home/services");
+
 const Review = require("../Module/Home/review");
 const WhenEver = require("../Module/Home/whenEver");
 const WhatInIt = require("../Module/Home/whatInIt");
 const ContactUs = require("../Module/Home/contact");
 const About = require("../Module/Home/About");
-const ServiceNav = require("../Module/Home/ServiceHeader");
+const UserNav = require("../Module/Home/User");
+const Service = require("../Module/Home/service");
 
-module.exports.CarouselPage = async (req, res) => {
-  try {
-    const Caro = await Services.find({});
-    res.status(200).json({ success: true, Caro });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-};
 
 module.exports.ServicePages = async (req, res) => {
   try {
-    const service = await Services.find({});
+    const service = await Service.find({});
     res.status(200).json({ success: true, service });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -52,7 +45,7 @@ module.exports.WhatInIt = async (req, res) => {
 module.exports.service = async (req, res) => {
   try {
     const { service_id } = req.params;
-    const service = await Services.findById(service_id);
+    const service = await Service.findById(service_id);
     res.status(201).json({ success: true, service });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -82,7 +75,7 @@ module.exports.About = async (req, res) => {
 };
 module.exports.Headernav = async (req, res) => {
   try {
-    const headerNav = await ServiceNav.find({});
+    const headerNav = await UserNav.find({});
     res.status(201).json({ success: true, headerNav });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

@@ -51,7 +51,7 @@ const ProfileDropDown = (props) => {
         const { success, message, headerNav } = responseData;
         console.log(headerNav);
         if (success) {
-          setProfileData(headerNav[2].list);
+          setProfileData(headerNav[4].list);
         } else {
           handleError(message);
         }
