@@ -1,12 +1,12 @@
 const OrderService = require("../Module/Order/OrderService");
 const ProviderAuth = require("../Module/Provider/providerAuth");
-const Provider = require("../Module/Provider/providerService");
 const User = require("../Module/userModule/user");
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcryptjs");
 const UserOrder = require("../Module/userModule/UserOrder");
 const ProviderOrder = require("../Module/Provider/ProviderOrder");
 const GeoNear = require("../Module/Order/GeoNearData");
+const ProviderService = require("../Module/Provider/providerService");
 
 module.exports.fetchingNearServiceProviderLocation = async (req, res) => {
   try {
@@ -17,7 +17,7 @@ module.exports.fetchingNearServiceProviderLocation = async (req, res) => {
       return res.status(401).json({ success: false, message: "Invalid user" });
     }
     const { mobilenumber, firstname, lastname } = user;
-    const providerData = await Provider.aggregate([
+    const providerData = await ProviderService.aggregate([
       {
         $geoNear: {
           near: {
@@ -50,6 +50,7 @@ module.exports.fetchingNearServiceProviderLocation = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Waiting for the provider",
+      providerData,
     });
   } catch (err) {
     console.log(err.message);
@@ -201,10 +202,28 @@ module.exports.fetchUserOrderDetail = async (req, res) => {
 module.exports.OrderService = async (req, res) => {
   try {
     const { username } = req.user;
-    const orderservice = await OrderService.find({ username });
+    const order = await OrderService.find({ userusername: username });
     if (!orderservice) {
       res.json({ success: false, message: "You haven't palce any order" });
     }
+    const {
+      providerfirstname,
+      providerlastname,
+      price,
+      image,
+      location,
+      status,
+      servicename,
+    } = order;
+    const orderservice = {
+      providerfirstname,
+      providerlastname,
+      price,
+      image,
+      location,
+      status,
+      servicename,
+    };
     res.status(201).json({ success: true, orderservice });
   } catch (err) {
     console.log(err.message);
@@ -214,7 +233,9 @@ module.exports.OrderService = async (req, res) => {
 module.exports.ServiceProvided = async (req, res) => {
   try {
     const { username } = req.provider;
-    const orderservice = await OrderService.find({ username });
+    const orderservice = await OrderService.find({
+      providerusername: username,
+    });
     if (!orderservice) {
       res.json({ success: false, message: "You haven't served any services" });
     }

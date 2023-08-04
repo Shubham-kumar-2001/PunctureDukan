@@ -136,6 +136,7 @@ const OrderModelPOPUP = (props) => {
       if (success) {
         setOpen(false);
         localStorage.setItem("acceptorder", true);
+        localStorage.setItem("serviceorder_id", serviceOrder_id);
         props.setServiceOrder_id(serviceOrder_id);
         handleSuccess(message);
         navigate("/serviceprovider/puncturedukan/orderdata");

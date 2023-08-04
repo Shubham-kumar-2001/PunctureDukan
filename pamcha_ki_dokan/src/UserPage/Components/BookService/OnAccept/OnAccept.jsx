@@ -9,7 +9,10 @@ const OnAcceptOrder = (props) => {
       </div>
       <div className="flex justify-center flex-col mt-2">
         <span className="text-[19px] font-normal">
-          Distance:-{props.distance}
+          Distance:-
+          {props.distance < 1000
+            ? `${parseInt(props.distance)}meter`
+            : `${parseInt(props.distance) / 1000}km`}
         </span>
       </div>
       <div className="flex justify-center flex-col mt-2">

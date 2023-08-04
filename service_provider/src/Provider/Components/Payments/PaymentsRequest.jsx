@@ -39,7 +39,6 @@ const PaymentsRequest = (props) => {
     });
   const { isLoading, sendRequest } = useHttpClient();
   const { sendRequest: paymentsSendRequest } = useHttpClient();
-  // alert(process.env.REACT_APP_RAZOR_PAY_ID);
   const initPayment = (data) => {
     const options = {
       key: `${process.env.REACT_APP_RAZOR_PAY_ID}`,
@@ -49,6 +48,7 @@ const PaymentsRequest = (props) => {
       description: "Test Transaction",
       image: props.payment.image,
       order_id: data.id,
+
       handler: async (response) => {
         try {
           const paymentsVerification = await paymentsSendRequest(
@@ -58,6 +58,8 @@ const PaymentsRequest = (props) => {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
+              amount: data.amount,
+              serviceorder_id: localStorage.getItem("serviceorder_id"),
             }),
             {
               "Content-Type": "application/json",

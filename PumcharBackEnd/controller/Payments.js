@@ -1,5 +1,6 @@
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
+const OrderService = require("../Module/Order/OrderService");
 // console.log(process.env.RAZOR_PAY_SECRET_KEY, process.env.RAZOR_PAY_ID);
 
 module.exports.PaymentsOrder = async (req, res) => {
@@ -41,12 +42,13 @@ module.exports.PaymentsOrder = async (req, res) => {
 
 module.exports.VerifyPayments = async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-      req.body;
-    console.log(
-      { razorpay_order_id, razorpay_payment_id, razorpay_signature },
-      "hi"
-    );
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      serviceorder_id,
+      amount,
+    } = req.body;
     const shasum = crypto.createHmac(
       "sha256",
       process.env.RAZOR_PAY_SECRET_KEY
@@ -58,11 +60,12 @@ module.exports.VerifyPayments = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Transaction Failed!!!" });
     }
-
+    await OrderService.findByIdAndUpdate(
+      { _id: serviceorder_id },
+      { status: "Delivered", price: amount }
+    );
     return res.status(200).json({
       success: true,
-      orderId: razorpay_order_id,
-      paymentsId: razorpay_payment_id,
       message: "Payment verified successfully",
     });
   } catch (error) {

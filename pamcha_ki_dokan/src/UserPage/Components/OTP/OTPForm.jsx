@@ -7,7 +7,7 @@ import { useHttpClient } from "../../../Hooks/http-hook";
 import AuthContex from "../../../Store/AuthContextProvider";
 import ButtonForm from "../../../UI/buttonForm";
 const OTPForm = (props) => {
-  const { isLoading, error, sendRequest } = useHttpClient();
+  const { isLoading, sendRequest } = useHttpClient();
   const { isLoading: isOTPLoading, sendRequest: OTPsendRequest } =
     useHttpClient();
   const [otp, setOtp] = useState("");
@@ -22,7 +22,7 @@ const OTPForm = (props) => {
       position: "top-right",
     });
 
-  let isValid = otp.length === 6;
+  let isValid = otp.length === 6 ? true : false;
   const otpSubmitHandler = async (event) => {
     event.preventDefault();
     if (!isValid) {

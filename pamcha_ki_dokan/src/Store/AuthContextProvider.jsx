@@ -43,8 +43,7 @@ export const AuthContexProvider = (props) => {
     setToken("");
     removeCookies("userjwt", {
       path: "/",
-
-      Domain: "puncturedukan-a16w.onrender.com",
+      domain: "puncturedukan-a16w.onrender.com",
     });
   };
   const contexValue = {

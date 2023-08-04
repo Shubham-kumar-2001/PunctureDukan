@@ -14,7 +14,6 @@ const {
 const Authmiddleware = require("../Middleware/Authmiddleware");
 const {
   fetchUserOrderDetail,
-  acceptOrder,
   OrderService,
 } = require("../controller/OrderController");
 const router = express.Router();

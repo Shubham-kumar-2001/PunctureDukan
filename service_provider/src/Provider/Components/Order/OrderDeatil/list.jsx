@@ -23,18 +23,24 @@ const ListOrder = (props) => {
                   </span>
                   <span className="inline-flex items-start w-[100%]  ">
                     <span className="text-[13px] font-[450] text-stone-800 bg-slate-100 p-1 pl-0">
-                      Served By : {props.name}
+                      Served By : {props.providername}
                     </span>
                   </span>
                 </div>
               </div>
-              <div className="ml-[110px] flex flex-col flex-wrap m-0 pb-[10px] justify-center sm:ml-auto">
-                <span className="text-[15px] font-[450] text-stone-900">
-                  Service Location
-                </span>
+              <div className="ml-[15px] flex flex-col flex-wrap my-auto py-[10px] justify-center sm:ml-auto">
                 <div className="flex flex-wrap space-x-2 items-center">
                   <div className="rounded-[50%] bg-green-700 w-[7px] h-[7px]"></div>
-                  <div className="text-[15px] font-[500]">Mobarakpur</div>
+                  <div className="text-[15px] font-[500]">
+                    {props.useraddress}
+                  </div>
+                </div>
+                <span className="w-[1.5px] h-6 bg-gray-700 ml-[1px] p-0"></span>
+                <div className="flex flex-wrap space-x-2 items-center">
+                  <div className="rounded-[50%] bg-green-700 w-[7px] h-[7px]"></div>
+                  <div className="text-[15px] font-[500]">
+                    {props.provideraddress}
+                  </div>
                 </div>
               </div>
             </div>
@@ -80,18 +86,24 @@ const ListOrder = (props) => {
                 </span>
                 <span className="inline-flex items-start w-[100%]  ">
                   <span className="text-[13px] font-[450] text-stone-800 bg-slate-100 p-1 pl-0">
-                    Served By : {props.name}
+                    Served By : {props.providername}
                   </span>
                 </span>
               </div>
             </div>
-            <div className="ml-[110px] flex flex-col flex-wrap m-0 pb-[10px]">
-              <span className="text-[15px] font-[450] text-stone-900">
-                Service Location
-              </span>
+            <div className="ml-[15px] flex flex-col flex-wrap m-0 pb-[10px]">
               <div className="flex flex-wrap space-x-2 items-center">
                 <div className="rounded-[50%] bg-green-700 w-[7px] h-[7px]"></div>
-                <div className="text-[15px] font-[500]">Mobarakpur</div>
+                <div className="text-[15px] font-[500]">
+                  {props.useraddress}
+                </div>
+              </div>
+              <span className="w-[1.5px] h-6 bg-gray-700 ml-[1px] p-0"></span>
+              <div className="flex flex-wrap space-x-2 items-center">
+                <div className="rounded-[50%] bg-green-700 w-[7px] h-[7px]"></div>
+                <div className="text-[15px] font-[500]">
+                  {props.provideraddress}
+                </div>
               </div>
             </div>
           </div>
