@@ -29,6 +29,7 @@
     "fontawesome": "4.7",
     "google-map-react": "^2.2.1",
     "google-maps-react-markers": "^1.2.3",
+    "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.0",
     "jwt-decode": "^3.1.2",
     "mapbox-gl": "^2.15.0",

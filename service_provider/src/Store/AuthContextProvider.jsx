@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 import { getCurrentUser } from "../Middleware/middleware";
 import { useHttpClient } from "../Hooks/http-hook";
+import Cookies from "js-cookie";
 
 const AuthContex = React.createContext({
   token: "",
@@ -11,8 +11,9 @@ const AuthContex = React.createContext({
 });
 
 export const AuthContexProvider = (props) => {
-  const [cookies, setCookies, removeCookies] = useCookies([]);
-  const [token, setToken] = useState(localStorage.getItem("providerjwt"));
+  const [token, setToken] = useState(
+    Cookies.get("foo", { domain: "puncturedukan.onrender.com" })
+  );
   const { sendRequest } = useHttpClient();
   useEffect(() => {
     const fetchUsers = async () => {
@@ -22,28 +23,20 @@ export const AuthContexProvider = (props) => {
         );
       } catch (err) {
         setToken("");
-        localStorage.removeItem("providerjwt");
-        removeCookies("providerjwt", {
-          domain: "puncturedukan.onrender.com",
-        });
+        Cookies.remove("providerjwt");
+        localStorage.clear();
       }
     };
     fetchUsers();
   }, [token]);
   const loginHandler = (token) => {
     setToken(token);
-    console.log(token);
-    localStorage.setItem("providerjwt", token);
-    setCookies("providerjwt", token, {
-      domain: "puncturedukan.onrender.com",
-    });
+    Cookies.set("providerjwt", token);
   };
   const logoutHandler = () => {
     setToken("");
-    localStorage.removeItem("providerjwt");
-    removeCookies("providerjwt", {
-      domain: "puncturedukan.onrender.com",
-    });
+    Cookies.remove("providerjwt");
+    localStorage.clear();
   };
   const contexValue = {
     token: token,
