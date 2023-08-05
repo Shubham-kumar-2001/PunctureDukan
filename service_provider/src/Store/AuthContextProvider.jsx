@@ -12,7 +12,7 @@ const AuthContex = React.createContext({
 
 export const AuthContexProvider = (props) => {
   const [cookies, setCookies, removeCookies] = useCookies([]);
-  const [token, setToken] = useState(cookies.providerjwt);
+  const [token, setToken] = useState(localStorage.getItem("providerjwt"));
   const { sendRequest } = useHttpClient();
   useEffect(() => {
     const fetchUsers = async () => {
