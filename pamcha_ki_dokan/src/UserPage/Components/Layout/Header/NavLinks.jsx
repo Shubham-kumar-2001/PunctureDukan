@@ -53,7 +53,7 @@ const NavLinks = () => {
         {!isLoading &&
           authCtx.user_id &&
           authorized.map((auth, index) =>
-            auth.name !== "order" ? (
+            auth.name !== "order" && auth.name!=="Add Service" ? (
               <HeaderNavLinks name={auth.name} key={index} />
             ) : (
               ""

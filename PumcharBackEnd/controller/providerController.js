@@ -385,7 +385,6 @@ module.exports.logout = async (req, res) => {
     if (!existingUser) {
       res.json({ success: false, message: "Invalid user" });
     }
-    // await ProviderAuth.findOneAndUpdate({ username }, { isActive: false });
     await res.clearCookie("providerjwt");
     res.status(201).json({ success: true, message: "Logout Successfully" });
   } catch (err) {
@@ -453,13 +452,14 @@ module.exports.serviceProvidedByProvider = async (req, res) => {
   try {
     const { username } = req.provider;
     const { servicename, latitude, longitude, shopname, price } = req.body;
+    console.log({ servicename, latitude, longitude, shopname, price });
     const user = await ProviderAuth.findOne({ username });
     if (!user) {
       return res
         .status(501)
         .json({ success: false, message: "Couldn't find the User" });
     }
-    const service = await Service.findOne({ name: servicename });
+    const service = await Service.findOne({ servicename: servicename });
     if (!service) {
       return res.status(501).json({
         success: false,

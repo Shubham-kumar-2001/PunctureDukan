@@ -59,18 +59,18 @@ const AddService = () => {
     toast.success(msg, {
       position: "top-right",
     });
-  const onUpload = async (event) => {
-    try {
-      const file = event.target.files[0];
-      const base64 = await ConvertToBase64(file);
-      setImage(base64);
-      console.log(base64);
-      setImageError(false);
-    } catch (err) {
-      setImageError(true);
-      setImage("");
-    }
-  };
+  // const onUpload = async (event) => {
+  //   try {
+  //     const file = event.target.files[0];
+  //     const base64 = await ConvertToBase64(file);
+  //     setImage(base64);
+  //     console.log(base64);
+  //     setImageError(false);
+  //   } catch (err) {
+  //     setImageError(true);
+  //     setImage("");
+  //   }
+  // };
   const imageInputReset = () => {
     setImage("");
   };
@@ -83,7 +83,6 @@ const AddService = () => {
       shopname: enteredShopNameValue,
       servicename: enteredServiceNameValue,
       price: enteredServicePriceValue,
-      image: image,
       latitude: location.longitude,
       longitude: location.latitude,
     };
@@ -164,15 +163,15 @@ const AddService = () => {
                 success={!serviceNameHasError}
                 message="Enter valid Price"
               />
-              <CardImageContainer
+              {/* <CardImageContainer
                 onUpload={onUpload}
                 name=" ServiceImage"
                 image={image}
                 error={imageError}
                 message="Eneter valid Pan Card Image"
                 className="sm:w-[490px] w-[95%]"
-              />
-              <div className="flex justify-center mx-auto space-x-6 w-[95%] absolute top-[calc(95vh-10rem)] sm:relative sm:top-0">
+              /> */}
+              <div className="flex justify-center mx-auto space-x-6 w-[95%] absolute top-[calc(95vh-12rem)] sm:relative sm:top-0">
                 <ButtonForm
                   type="submit"
                   buttonContent={

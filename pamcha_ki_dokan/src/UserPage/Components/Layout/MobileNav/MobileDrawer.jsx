@@ -102,14 +102,18 @@ const MobileDrawer = (props) => {
               service={true}
             />
             {authCtx.user_id &&
-              props.authorized.list.map((auth, index) => (
-                <MobileList
-                  onClick={props.onClick}
-                  name={auth.name}
-                  fabIcon={auth.fabIcon}
-                  key={index}
-                />
-              ))}
+              props.authorized.list.map((auth, index) =>
+                auth.name !== "Add Service" ? (
+                  <MobileList
+                    onClick={props.onClick}
+                    name={auth.name}
+                    fabIcon={auth.fabIcon}
+                    key={index}
+                  />
+                ) : (
+                  ""
+                )
+              )}
             {!authCtx.user_id &&
               props.notAuthorized.list.map((auth, index) => (
                 <MobileList

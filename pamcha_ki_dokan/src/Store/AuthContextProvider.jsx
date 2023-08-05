@@ -23,24 +23,18 @@ export const AuthContexProvider = (props) => {
         );
       } catch (err) {
         setToken("");
-        removeCookies("userjwt", {
-          path: "/",
-        });
+        removeCookies("userjwt");
       }
     };
     fetchUsers();
   }, [token]);
   const loginHandler = (token) => {
     setToken(token);
-    setCookies("userjwt", token, {
-      path: "/",
-    });
+    setCookies("userjwt", token);
   };
   const logoutHandler = () => {
     setToken("");
-    removeCookies("userjwt", {
-      path: "/",
-    });
+    removeCookies("userjwt");
   };
   const contexValue = {
     token: token,

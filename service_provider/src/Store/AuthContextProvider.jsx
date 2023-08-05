@@ -23,10 +23,7 @@ export const AuthContexProvider = (props) => {
       } catch (err) {
         setToken("");
         localStorage.removeItem("providerjwt");
-        removeCookies("providerjwt", {
-          path: "/",
-         
-        });
+        removeCookies("providerjwt");
       }
     };
     fetchUsers();
@@ -35,17 +32,12 @@ export const AuthContexProvider = (props) => {
     setToken(token);
     console.log(token);
     localStorage.setItem("providerjwt", token);
-    setCookies("providerjwt", token, {
-      path: "/",
-    });
+    setCookies("providerjwt", token);
   };
   const logoutHandler = () => {
     setToken("");
     localStorage.removeItem("providerjwt");
-    removeCookies("providerjwt", {
-      path: "/",
-      
-    });
+    removeCookies("providerjwt");
   };
   const contexValue = {
     token: token,

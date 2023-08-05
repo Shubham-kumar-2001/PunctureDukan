@@ -38,12 +38,10 @@ module.exports.Register = async (req, res) => {
     });
     const token = createSecretToken(user.username);
     res.cookie("userjwt", token, {
-      withCredentials: true,
       httpOnly: true,
       maxAge: 7 * 24 * 3600 * 1000,
       sameSite: "none",
       secure: true,
-      expires: 1,
     });
     // req.session.usename = user.username;
     res.status(201).json({
@@ -90,12 +88,10 @@ module.exports.Login = async (req, res) => {
       }
       const token = createSecretToken(user.username);
       res.cookie("userjwt", token, {
-        withCredentials: true,
         httpOnly: true,
         maxAge: 7 * 24 * 3600 * 1000,
         sameSite: "none",
         secure: true,
-        expires: 1,
       });
       res.status(201).json({
         message: "User logged in successfully",
@@ -235,12 +231,10 @@ module.exports.verifyLoginOTP = async (req, res) => {
       }
       const token = createSecretToken(user.username);
       res.cookie("userjwt", token, {
-        withCredentials: true,
         httpOnly: true,
         maxAge: 7 * 24 * 3600 * 1000,
         sameSite: "none",
         secure: true,
-        expires: 1,
       });
       res.status(201).json({
         message: "User logged in successfully",
@@ -377,9 +371,7 @@ module.exports.logout = async (req, res) => {
     if (!existingUser) {
       res.json({ success: false, message: "Invalid user" });
     }
-    await res.clearCookie("userjwt", {
-      path: "/",
-    });
+    await res.clearCookie("userjwt");
     res.status(201).json({ success: true, message: "Logout Successfully" });
   } catch (err) {
     res
