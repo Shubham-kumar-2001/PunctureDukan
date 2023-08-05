@@ -43,12 +43,11 @@ module.exports.Register = async (req, res) => {
     });
     const token = createProviderSecretToken(provider.username);
     res.cookie("providerjwt", token, {
-      withCredentials: true,
       httpOnly: true,
       maxAge: 7 * 24 * 3600 * 1000,
       sameSite: "none",
       secure: true,
-      expires: 1,
+      domain: "providerpuncturedukan.onrender.com",
     });
     res.status(201).json({
       message: "User signed in successfully",
@@ -97,12 +96,10 @@ module.exports.Login = async (req, res) => {
 
       const token = createProviderSecretToken(provider.username);
       res.cookie("providerjwt", token, {
-        withCredentials: true,
         httpOnly: true,
         maxAge: 7 * 24 * 3600 * 1000,
         sameSite: "none",
         secure: true,
-        expires: 1,
       });
       res.status(201).json({
         message: "User logged in successfully",
@@ -242,12 +239,10 @@ module.exports.verifyLoginOTP = async (req, res) => {
       }
       const token = createProviderSecretToken(user.username);
       res.cookie("providerjwt", token, {
-        withCredentials: true,
         httpOnly: true,
         maxAge: 7 * 24 * 3600 * 1000,
         sameSite: "none",
         secure: true,
-        expires: 1,
       });
       res.status(201).json({
         message: "User logged in successfully",

@@ -42,6 +42,7 @@ module.exports.Register = async (req, res) => {
       maxAge: 7 * 24 * 3600 * 1000,
       sameSite: "none",
       secure: true,
+      domain:"puncturedukan-a16w.onrender.com"
     });
     // req.session.usename = user.username;
     res.status(201).json({
@@ -92,6 +93,7 @@ module.exports.Login = async (req, res) => {
         maxAge: 7 * 24 * 3600 * 1000,
         sameSite: "none",
         secure: true,
+        domain:"puncturedukan-a16w.onrender.com"
       });
       res.status(201).json({
         message: "User logged in successfully",
@@ -235,6 +237,7 @@ module.exports.verifyLoginOTP = async (req, res) => {
         maxAge: 7 * 24 * 3600 * 1000,
         sameSite: "none",
         secure: true,
+        domain:"puncturedukan-a16w.onrender.com"
       });
       res.status(201).json({
         message: "User logged in successfully",
