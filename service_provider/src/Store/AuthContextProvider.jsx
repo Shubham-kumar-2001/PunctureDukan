@@ -12,7 +12,7 @@ const AuthContex = React.createContext({
 
 export const AuthContexProvider = (props) => {
   const [token, setToken] = useState(
-    Cookies.get("foo", { domain: "puncturedukan.onrender.com" })
+    Cookies.get("providerjwt", { domain: "puncturedukan.onrender.com" })
   );
   const { sendRequest } = useHttpClient();
   useEffect(() => {

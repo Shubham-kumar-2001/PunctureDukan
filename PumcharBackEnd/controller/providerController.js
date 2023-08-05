@@ -380,8 +380,9 @@ module.exports.logout = async (req, res) => {
       res.json({ success: false, message: "Invalid user" });
     }
     // await ProviderAuth.findOneAndUpdate({ username }, { isActive: false });
-    await res.clearCookie("providerjwt", {
-      domain: "puncturedukan.onrender.com",
+    await res.clearCookie("providerjwt");
+    res.cookie("providerjwt", "none", {
+      httpOnly: true,
     });
     res.status(201).json({ success: true, message: "Logout Successfully" });
   } catch (err) {

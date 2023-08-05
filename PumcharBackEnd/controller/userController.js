@@ -371,8 +371,9 @@ module.exports.logout = async (req, res) => {
     if (!existingUser) {
       res.json({ success: false, message: "Invalid user" });
     }
-    await res.clearCookie("userjwt", {
-      domain: "puncturedukan.onrender.com",
+    await res.clearCookie("userjwt");
+    res.cookie("userjwt", "none", {
+      httpOnly: true,
     });
     res.status(201).json({ success: true, message: "Logout Successfully" });
   } catch (err) {
