@@ -43,11 +43,12 @@ module.exports.Register = async (req, res) => {
     });
     const token = createProviderSecretToken(provider.username);
     res.cookie("providerjwt", token, {
+      
       httpOnly: true,
       maxAge: 7 * 24 * 3600 * 1000,
       sameSite: "none",
       secure: true,
-      domain: "providerpuncturedukan.onrender.com",
+      
     });
     res.status(201).json({
       message: "User signed in successfully",
@@ -96,10 +97,12 @@ module.exports.Login = async (req, res) => {
 
       const token = createProviderSecretToken(provider.username);
       res.cookie("providerjwt", token, {
+        
         httpOnly: true,
         maxAge: 7 * 24 * 3600 * 1000,
         sameSite: "none",
         secure: true,
+        
       });
       res.status(201).json({
         message: "User logged in successfully",
@@ -239,10 +242,12 @@ module.exports.verifyLoginOTP = async (req, res) => {
       }
       const token = createProviderSecretToken(user.username);
       res.cookie("providerjwt", token, {
+        
         httpOnly: true,
         maxAge: 7 * 24 * 3600 * 1000,
         sameSite: "none",
         secure: true,
+        
       });
       res.status(201).json({
         message: "User logged in successfully",
@@ -380,6 +385,7 @@ module.exports.logout = async (req, res) => {
     if (!existingUser) {
       res.json({ success: false, message: "Invalid user" });
     }
+    // await ProviderAuth.findOneAndUpdate({ username }, { isActive: false });
     await res.clearCookie("providerjwt");
     res.status(201).json({ success: true, message: "Logout Successfully" });
   } catch (err) {
@@ -447,14 +453,13 @@ module.exports.serviceProvidedByProvider = async (req, res) => {
   try {
     const { username } = req.provider;
     const { servicename, latitude, longitude, shopname, price } = req.body;
-    console.log({ servicename, latitude, longitude, shopname, price });
     const user = await ProviderAuth.findOne({ username });
     if (!user) {
       return res
         .status(501)
         .json({ success: false, message: "Couldn't find the User" });
     }
-    const service = await Service.findOne({ servicename: servicename });
+    const service = await Service.findOne({ name: servicename });
     if (!service) {
       return res.status(501).json({
         success: false,

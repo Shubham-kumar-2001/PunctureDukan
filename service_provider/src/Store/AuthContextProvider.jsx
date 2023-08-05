@@ -23,7 +23,9 @@ export const AuthContexProvider = (props) => {
       } catch (err) {
         setToken("");
         localStorage.removeItem("providerjwt");
-        removeCookies("providerjwt");
+        removeCookies("providerjwt", {
+          domain: "puncturedukan.onrender.com",
+        });
       }
     };
     fetchUsers();
@@ -32,12 +34,16 @@ export const AuthContexProvider = (props) => {
     setToken(token);
     console.log(token);
     localStorage.setItem("providerjwt", token);
-    setCookies("providerjwt", token);
+    setCookies("providerjwt", token, {
+      domain: "puncturedukan.onrender.com",
+    });
   };
   const logoutHandler = () => {
     setToken("");
     localStorage.removeItem("providerjwt");
-    removeCookies("providerjwt");
+    removeCookies("providerjwt", {
+      domain: "puncturedukan.onrender.com",
+    });
   };
   const contexValue = {
     token: token,

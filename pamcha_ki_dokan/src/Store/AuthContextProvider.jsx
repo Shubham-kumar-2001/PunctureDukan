@@ -23,18 +23,24 @@ export const AuthContexProvider = (props) => {
         );
       } catch (err) {
         setToken("");
-        removeCookies("userjwt");
+        removeCookies("userjwt", {
+          domain: "puncturedukan.onrender.com",
+        });
       }
     };
     fetchUsers();
   }, [token]);
   const loginHandler = (token) => {
     setToken(token);
-    setCookies("userjwt", token);
+    setCookies("userjwt", token, {
+      domain: "puncturedukan.onrender.com",
+    });
   };
   const logoutHandler = () => {
     setToken("");
-    removeCookies("userjwt");
+    removeCookies("userjwt", {
+      domain: "puncturedukan.onrender.com",
+    });
   };
   const contexValue = {
     token: token,
