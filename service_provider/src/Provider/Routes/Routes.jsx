@@ -31,7 +31,9 @@ const RoutesProvider = () => {
     setUser({});
   };
   const [payment, setPayment] = useState();
-  const [serviceOrder_id, setServiceOrder_id] = useState();
+  const [serviceOrder_id, setServiceOrder_id] = useState(
+    localStorage.getItem("serviceorder_id")
+  );
   // const [verify, setVerify] = useState(false);
   console.log(payment);
   const routesForPublic = [

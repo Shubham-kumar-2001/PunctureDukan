@@ -30,7 +30,7 @@ const OnArriveOTP = (props) => {
         "POST",
         JSON.stringify({
           otp,
-          order_id: props.serviceOrder_id,
+          order_id: localStorage.getItem(""),
         }),
         {
           "Content-Type": "application/json",

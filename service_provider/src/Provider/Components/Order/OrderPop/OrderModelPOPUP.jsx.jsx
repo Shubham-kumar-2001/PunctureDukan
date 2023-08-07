@@ -12,9 +12,7 @@ import Child from "./child";
 const OrderModelPOPUP = (props) => {
   const authCtx = useContext(AuthContex);
   const intervalRef = useRef(null);
-  const [order_id, setOrder_id] = useState({
-    provider_id: "",
-  });
+  const [order_id, setOrder_id] = useState(localStorage.getItem("provider_id"));
 
   const navigate = useNavigate();
   const [userData, setUserData] = useState([]);
@@ -76,7 +74,8 @@ const OrderModelPOPUP = (props) => {
         localStorage.setItem("userData", userEncryptedAData);
         setOrderData(provider.Geonear[0]);
         setUserData(provider.userdata[0]);
-        setOrder_id({ provider_id: responseData.provider._id });
+        setOrder_id(responseData.provider._id);
+        localStorage.setItem("provider_id",responseData.provider._id)
         const data = await axios.get(
           `${process.env.REACT_APP_ADDRESS}${provider.Geonear[0].providerlocation.coordinates[0]},${provider.Geonear[0].providerlocation.coordinates[1]}.json?access_token=${process.env.REACT_APP_MAPBOX}`
         );
