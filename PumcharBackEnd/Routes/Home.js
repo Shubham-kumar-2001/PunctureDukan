@@ -10,6 +10,7 @@ const {
   Contactus,
   About,
   Headernav,
+  FooterNav,
 } = require("../controller/HomeController");
 const Authmiddleware = require("../Middleware/Authmiddleware");
 router.route("/contact").post(Contactus);
@@ -19,6 +20,7 @@ router.route("/about").get(About);
 router.route("/whenever&whereever").get(WhenEverAndWhereEver);
 router.route("/whatinit").get(WhatInIt);
 router.route("/navdata").get(Headernav);
+router.route("/footer").get(FooterNav);
 router.route("/service/:service_id").get(Authmiddleware, service);
 
 module.exports = router;

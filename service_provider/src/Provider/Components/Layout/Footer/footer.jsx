@@ -39,7 +39,7 @@ const Footer = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className=" flex flex-col flex-wrap my-4 ">
                 <span className="mx-4 p-2 flex flex-col flex-wrap items-start justify-center">
-                  <span className="text-[30px] font-medium ">PancharDokan</span>
+                  <span className="text-[30px] font-medium ">PunctureDukan</span>
                   <span className="text-[18px] font-normal my-3">
                     24/7 roadside assistance service provider for bikes & cars
                     across india

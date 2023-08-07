@@ -5,6 +5,7 @@ const ServiceSchema = new Schema({
   price: Number,
   aboutServices: String,
   image: String,
+  fabIcon: String,
 });
 
 const Service = mongoose.model("Service", ServiceSchema);

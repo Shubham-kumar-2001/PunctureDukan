@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 const MobileList = (props) => {
   var str = props.name.replace(/\s+/g, "");
-  console.log(props.isLoading, "load");
+  // console.log(props.isLoading, "load");
   return (
     <li onClick={props.onClick}>
       <Link

@@ -1,19 +1,19 @@
-import React from "react";
-const ContactAddress = () => {
+import React  from "react";
+import List from "./List";
+const ContactAddress = (props) => {
   return (
     <div className="flex flex-col flex-wrap  h-auto relative cursor-pointer w-[100%] ">
       <div className="flex flex-wrap items-start justify-center ml-2 md:ml-3 lg:ml-5 mb-1 mt-4">
-        <span className="text-[20px] font-semibold">
-          IIIT Bhgalpur Sabour Bhagalpur Near BCE campue
+        <span class="flex-1 ml-3  text-[20px] font-semibold">
+          {props.address}
         </span>
       </div>
       <div className="flex flex-wrap items-start justify-center flex-col ml-2 md:ml-3 lg:ml-5 mb-1 mt-4">
-        <span className="text-[20px] font-medium">Links</span>
+        <span className="text-[20px] font-medium">{props.link}</span>
         <ul className="mt-2 flex flex-col space-y-1">
-          <li className="text-[17px] font-normal">Career</li>
-          <li className="text-[17px] font-normal">Contact Us</li>
-          <li className="text-[17px] font-normal">Terms & Condations</li>
-          <li className="text-[17px] font-normal">Priyacy Policy</li>
+          {props.links.map((help, index) => (
+            <List name={help.name} fabIcon={help.fabIcon} key={index} />
+          ))}
         </ul>
       </div>
     </div>

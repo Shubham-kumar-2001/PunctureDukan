@@ -1,4 +1,3 @@
-
 const Review = require("../Module/Home/review");
 const WhenEver = require("../Module/Home/whenEver");
 const WhatInIt = require("../Module/Home/whatInIt");
@@ -6,7 +5,7 @@ const ContactUs = require("../Module/Home/contact");
 const About = require("../Module/Home/About");
 const UserNav = require("../Module/Home/User");
 const Service = require("../Module/Home/service");
-
+const Footer = require("../Module/Home/footer");
 
 module.exports.ServicePages = async (req, res) => {
   try {
@@ -77,6 +76,14 @@ module.exports.Headernav = async (req, res) => {
   try {
     const headerNav = await UserNav.find({});
     res.status(201).json({ success: true, headerNav });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+module.exports.FooterNav = async (req, res) => {
+  try {
+    const FooterNav = await Footer.find({});
+    res.status(200).json({ success: true, FooterNav });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

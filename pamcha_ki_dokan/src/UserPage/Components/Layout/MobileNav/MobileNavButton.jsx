@@ -1,7 +1,6 @@
 import React from "react";
 import MobileList from "./mobileList";
 const MobilenavButton = (props) => {
-  console.log(props.isLoading, "loading");
   return (
     <li>
       <button
