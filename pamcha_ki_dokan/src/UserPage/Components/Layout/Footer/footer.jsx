@@ -21,7 +21,7 @@ const Footer = () => {
     const fetchFooter = async () => {
       try {
         const responseData = await footerSendRequest(
-          "https://puncturedukan.onrender.com//api/puncturedukan/footer"
+          "https://puncturedukan.onrender.com/api/puncturedukan/footer"
         );
         const { success, message, FooterNav } = responseData;
         if (success) {

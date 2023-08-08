@@ -78,8 +78,8 @@ const ProviderDetail = () => {
   //   console.log(providerDetail, "detail", Object.keys(providerDetail).length);
   return (
     <>
-      {!Object.keys(providerDetail).length && <OnAcceptLoading />}
-      {Object.keys(providerDetail).length && (
+      {Object.keys(providerDetail).length<=0 && <OnAcceptLoading />}
+      {Object.keys(providerDetail).length>=1 && (
         <div>
           <OnAcceptProviderData
             providerDetail={providerDetail}

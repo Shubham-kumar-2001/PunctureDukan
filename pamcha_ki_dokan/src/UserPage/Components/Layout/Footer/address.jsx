@@ -4,7 +4,7 @@ const ContactAddress = (props) => {
   return (
     <div className="flex flex-col flex-wrap  h-auto relative cursor-pointer w-[100%] ">
       <div className="flex flex-wrap items-start justify-center ml-2 md:ml-3 lg:ml-5 mb-1 mt-4">
-        <span class="flex-1 ml-3  text-[20px] font-semibold">
+        <span class="flex-1 ml-1 text-[20px] font-semibold">
           {props.address}
         </span>
       </div>
