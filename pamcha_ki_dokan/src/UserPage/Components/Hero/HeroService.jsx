@@ -12,7 +12,11 @@ const HeroService = (props) => {
         </div>
       </div>
       <div class="card-content space-y-4">
-        <h2 class="name">{props.name}</h2>
+        <h2 class="name">
+          {props.name.length > 21
+            ? `${props.name.substring(0, 250)}...`
+            : props.name}
+        </h2>
         <p class="description">{props.aboutServices}</p>
         <h2 className="price font-semibold text-[1.2rem]">₹ {props.price}</h2>
         <ButtonForm

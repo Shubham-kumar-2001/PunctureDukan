@@ -16,7 +16,6 @@ const ProviderDetail = () => {
   const navigate = useNavigate();
   const [providerAddress, setProviderAddress] = useState([]);
   const intervalRef = useRef(null);
-  localStorage.setItem("dog", true);
   if (!providerDetail.length && !Object.keys(providerDetail).length) {
     const providerData = localStorage.getItem("providerServiceData");
     if (providerData) {

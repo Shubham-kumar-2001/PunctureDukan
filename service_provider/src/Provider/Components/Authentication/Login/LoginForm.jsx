@@ -85,7 +85,6 @@ const LoginForm = () => {
         const { success, message } = data;
         if (success) {
           handleSuccess(message);
-          console.log(data.token);
           authCtx.login(data.token);
           navigate("/serviceprovider/puncturedukan/locate");
         } else {

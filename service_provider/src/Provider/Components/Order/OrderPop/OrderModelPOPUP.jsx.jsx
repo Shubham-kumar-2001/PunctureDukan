@@ -65,7 +65,6 @@ const OrderModelPOPUP = (props) => {
         `https://puncturedukan.onrender.com/api/puncturedukan/serviceorder/providerorderdetail`
       );
       const { success, provider } = responseData;
-      console.log(provider.Geonear[0].username, "data");
       if (success && provider.Geonear[0].username === authCtx.user_id) {
         setOpen(true);
         const providerEncryptedAData = encryptData(provider.Geonear[0]);
@@ -98,8 +97,6 @@ const OrderModelPOPUP = (props) => {
   useEffect(() => {
     intervalRef.current = setInterval(async () => {
       fetchUsers();
-      console.log("hello");
-      console.log(intervalRef.current);
     }, 17000);
     return () => {
       clearInterval(intervalRef.current);
@@ -170,7 +167,6 @@ const OrderModelPOPUP = (props) => {
       }
     } catch (err) {}
   };
-  console.log(orderData, Object.keys(orderData).length, "orderdata");
   return (
     // <div className="container ">
     //   <div className="flex flex-wrap mx-auto flex-col w-[99%] sm:w-[95%] sm:mx-auto md:w-[85%]">

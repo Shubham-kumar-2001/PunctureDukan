@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import { useEffect } from "react";
 const ProfileDropDown = (props) => {
-  console.log(props);
   const [profileData, setProfileData] = useState([]);
   const { isLoading, error, sendRequest } = useHttpClient();
   const { isLoading: profileLoading, sendRequest: profileSendRequest } =
@@ -49,7 +48,7 @@ const ProfileDropDown = (props) => {
           `${process.env.REACT_APP_HOME}navdata`
         );
         const { success, message, headerNav } = responseData;
-        console.log(headerNav);
+      
         if (success) {
           setProfileData(headerNav[4].list);
         } else {

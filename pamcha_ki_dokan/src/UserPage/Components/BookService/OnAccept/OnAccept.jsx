@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonForm from "../../../../UI/buttonForm";
+// import ButtonForm from "../../../../UI/buttonForm";
 const OnAcceptOrder = (props) => {
   return (
     <div className="flex flex-col justify-center mt-[1rem] p-2 relative">
@@ -43,14 +43,7 @@ const OnAcceptOrder = (props) => {
           {props.address}
         </span>
       </div>
-      <div className="w-[100%] flex  justify-center mx-auto">
-        <ButtonForm
-          onClick={props.onClick}
-          type="submit"
-          buttonContent="Payments Done"
-          className="btn-primary text-[17px] w-[70%] py-[.7rem] px-[2.6rem]  cursor-pointer mb-[1rem]"
-        />
-      </div>
+      
     </div>
   );
 };

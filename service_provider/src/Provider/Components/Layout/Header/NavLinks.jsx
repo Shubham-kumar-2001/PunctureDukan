@@ -23,7 +23,6 @@ const NavLinks = () => {
           `${process.env.REACT_APP_HOME}navdata`
         );
         const { success, message, headerNav } = responseData;
-        console.log(headerNav);
         if (success) {
           setAuthorized(headerNav[2].list);
           setNotAuthorized(headerNav[3].list);
